@@ -46,14 +46,10 @@ app.controller('masterCtrl', ['$http', '$chttp', '$timeout', function ($http, $c
         vm.success = true;
         vm.data = data;
         for (let i = 0; i < vm.data.length; i++) {
-          vm.data[i].expanded = false;
-          vm.data[i].hasExpanded = false;
-          vm.data[i].height = "25px";
+          setValues(vm.data[i]);
           if (vm.data[i].PlaceType == 'Area') {
             for (var j = 0; j < vm.data[i].Stops.length; j++) {
-              vm.data[i].Stops[j].expanded = false;
-              vm.data[i].hasExpanded = false;
-              vm.data[i].Stops[j].height = "25px";
+              setValues(vm.data[i].Stops[j]);
             }
           }
         }
@@ -124,7 +120,12 @@ app.controller('masterCtrl', ['$http', '$chttp', '$timeout', function ($http, $c
         }
       }
     }, false);
-  })
+  });
+  function setValues(obj) {
+    obj.expanded = false;
+    obj.hasExpanded = false;
+    obj.height = "25px";
+  }
 }]);
 
 app.service('$chttp', ['$http', '$q', '$timeout', function ($http, $q, $timeout) {
