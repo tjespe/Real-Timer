@@ -23,21 +23,18 @@ app.controller('masterCtrl', ['$http', '$chttp', '$timeout', function ($http, $c
   vm.jqLoaded = false;
   vm.status = "Lokaliserer…";
   vm.success = false;
-  vm.error = false;
   vm.data = [];
   vm.coords = [0,0];
   vm.conv = $chttp.get('assets/converter.min.js').then((data)=>{
     eval(data);
   }).catch((data, status)=>{
-    console.log(data,status);
-    vm.error = true;
+    vm.status = "Vennligst oppdater siden";
   });
 
   let geo_success = (position)=>{
     vm.conv.then(()=>{
       vm.coords = convert(position.coords.latitude, position.coords.longitude);
       vm.status = "Laster inn data…";
-      console.log(vm.coords);
       $chttp.get('//real-timer-server.tk/cors.php?url=reisapi.ruter.no%2FPlace%2FGetClosestPlacesExtension%3Fcoordinates%3Dx%3D'+Math.round(vm.coords[0])+'%2Cy%3D'+Math.round(vm.coords[1])+'%26proposals%3D12', 0).then(function (data) {
         vm.success = true;
         vm.data = data;
@@ -57,7 +54,6 @@ app.controller('masterCtrl', ['$http', '$chttp', '$timeout', function ($http, $c
   }
   let geo_error = ()=>{
     vm.status = "Fikk ikke tilgang til stedstjenester";
-    vm.error = true;
   }
   let geo_options = {
     enableHighAccuracy: true,
@@ -129,13 +125,9 @@ app.service('$chttp', ['$http', '$q', '$timeout', function ($http, $q, $timeout)
     options.timeout = deferred.promise;
     let request = $http.get(url, options);
     request.success(function (data) {
-      if (typeof Storage !== "undefined") {
-        try {
-          localStorage[url] = JSON.stringify(data);
-        } catch (e) {
-          console.log("Couldn't save "+url+"-data to storage even though storage exists. Error:",e);
-        }
-      }
+      try {
+        localStorage[url] = JSON.stringify(data);
+      } catch (e) { }
       deferred.resolve(data);
       resolved = true;
     });
