@@ -23,10 +23,7 @@ app.controller('masterCtrl', ['$http', '$chttp', '$timeout', function ($http, $c
   vm.jqLoaded = false;
   vm.status = "Lokaliserer…";
   vm.success = false;
-  vm.errors = {
-    unknown: false,
-    position: false
-  };
+  vm.error = false;
   vm.data = [];
   vm.coords = [0,0];
   vm.conv = $chttp.get('assets/converter.min.js').then((data)=>{
@@ -37,7 +34,6 @@ app.controller('masterCtrl', ['$http', '$chttp', '$timeout', function ($http, $c
   });
 
   let geo_success = (position)=>{
-    vm.errors.position = false;
     vm.conv.then(()=>{
       vm.coords = convert(position.coords.latitude, position.coords.longitude);
       vm.status = "Laster inn data…";
@@ -57,25 +53,21 @@ app.controller('masterCtrl', ['$http', '$chttp', '$timeout', function ($http, $c
         vm.status = "Kunne ikke laste inn data.";
       });
     });
-    $timeout(()=>{
-      navigator.geolocation.clearWatch(vm.wpid);
-    }, 5000);
+    navigator.geolocation.clearWatch(vm.wpid);
   }
   let geo_error = ()=>{
-    console.log("Couldn't get position");
     vm.status = "Fikk ikke tilgang til stedstjenester";
-    vm.errors.position = true;
+    vm.error = true;
   }
   let geo_options = {
-    enableHighAccuracy: false,
-    maximumAge        : 30000,
-    timeout           : 2500
+    enableHighAccuracy: true,
+    maximumAge        : 0,
+    timeout           : 5000
   }
   if ('geolocation' in navigator) {
     vm.wpid = navigator.geolocation.watchPosition(geo_success, geo_error, geo_options);
   } else {
-    vm.status = "Fikk ikke tilgang til stedstjenester";
-    vm.errors.position = true;
+    geo_error();
   }
   vm.toggle = (i, j)=>{
     if (typeof j === 'undefined') return toggleValues(vm.data[i]);
