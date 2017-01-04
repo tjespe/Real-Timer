@@ -120,25 +120,18 @@ app.service('$chttp', ['$http', '$q', '$timeout', function ($http, $q, $timeout)
 
   vm.get = (url, timeout, options)=>{
     let deferred = $q.defer();
-    let resolved = false;
-    if (typeof options === 'undefined') var options = {};
+    if (typeof options === 'undefined') let options = {};
     options.timeout = deferred.promise;
-    let request = $http.get(url, options);
-    request.success(function (data) {
+    $http.get(url, options).success(function (data) {
       try {
         localStorage[url] = JSON.stringify(data);
       } catch (e) { }
       deferred.resolve(data);
-      resolved = true;
-    });
-    request.error(function (data, status) {
+    }).error(function (data, status) {
       if (typeof Storage !== "undefined" && url in localStorage) {
-        //console.info("The request to",url,"failed, but data existed locally");
         deferred.resolve(JSON.parse(localStorage[url]));
-        resolved = true;
-      } else {
-        deferred.reject("ERROR");
       }
+      deferred.reject("ERROR");
     });
     if (typeof timeout !== "undefined") {
       $timeout(function () {
