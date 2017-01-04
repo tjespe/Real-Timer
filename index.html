@@ -37,7 +37,7 @@
           <div ng-bind="stop.Name"></div>
           <div class="glyphicon" ng-if="m.jqLoaded" ng-class="{'glyphicon-chevron-up':stop.expanded, 'glyphicon-chevron-down':!stop.expanded}"></div>
         </div>
-        <iframe ng-if="index <= 5 || object.hasExpanded" id="{{stop.ID}}" style="{{'height:'+stop.height}}" ng-src="{{'//real-timer.tk/widget.php#('+stop.ID+')'+stop.Name+'%20('+stop.District+')'}}"></iframe>
+        <iframe ng-if="index <= 5 || object.hasExpanded" id="{{stop.ID}}" style="{{'height:'+stop.height}}" ng-src="{{'//real-timer-server.tk/widget.php#('+stop.ID+')'+stop.Name+'%20('+stop.District+')'}}"></iframe>
       </div>
     </div>
   </div>
