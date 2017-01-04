@@ -78,13 +78,8 @@ app.controller('masterCtrl', ['$http', '$chttp', '$timeout', function ($http, $c
     vm.errors.position = true;
   }
   vm.toggle = (i, j)=>{
-    if (typeof j === 'undefined') {
-      vm.data[i].expanded = !vm.data[i].expanded;
-      vm.data[i].hasExpanded = true;
-    } else {
-      vm.data[i].Stops[j].expanded = !vm.data[i].Stops[j].expanded;
-      vm.data[i].Stops[j].hasExpanded = true;
-    }
+    if (typeof j === 'undefined') return toggleValues(vm.data[i]);
+    return toggleValues(vm.data[i].Stops[j]);
   };
   $chttp.get('assets/glyphicons.min.css').then((data)=>{
     vm.css += data;
@@ -125,6 +120,10 @@ app.controller('masterCtrl', ['$http', '$chttp', '$timeout', function ($http, $c
     obj.expanded = false;
     obj.hasExpanded = false;
     obj.height = "25px";
+  }
+  function toggleValues(obj) {
+    obj.expanded = !obj.expanded;
+    obj.hasExpanded = true;
   }
 }]);
 
