@@ -72,13 +72,13 @@ app.controller('masterCtrl', ['$http', '$chttp', '$timeout', function ($http, $c
     if (typeof j === 'undefined') return toggleValues(vm.data[i]);
     return toggleValues(vm.data[i].Stops[j]);
   };
-  $chttp.get('assets/glyphicons.min.css').then((data)=>{
+  $chttp.get('assets/glyphicons.min.css', 0).then((data)=>{
     vm.css += data;
-  }, 0);
-  $chttp.get('//static.thorin-games.tk/css/ubuntu.php').then((data)=>{
+  });
+  $chttp.get('//static.thorin-games.tk/css/ubuntu.php', 0).then((data)=>{
     vm.css += data;
-  }, 0);
-  vm.jq = $chttp.get('https://code.jquery.com/jquery-3.1.1.min.js');
+  });
+  vm.jq = $chttp.get('https://code.jquery.com/jquery-3.1.1.min.js', 0);
   vm.jq.then((data)=>{
     eval(data);
     vm.jqLoaded = true;
