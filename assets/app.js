@@ -142,10 +142,9 @@ app.service('$chttp', ['$http', '$q', '$timeout', function ($http, $q, $timeout)
     });
     if (typeof timeout !== "undefined") {
       $timeout(function () {
-        if (!resolved && typeof Storage !== "undefined" && url in localStorage) {
+        try {
           deferred.resolve(JSON.parse(localStorage[url]));
-          //console.info("Timeout reached for",url,"but data existed locally");
-        }
+        } catch (e) {console.warn(e);}
       }, timeout);
     }
     return deferred.promise;
