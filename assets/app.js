@@ -120,7 +120,7 @@ app.service('$chttp', ['$http', '$q', '$timeout', function ($http, $q, $timeout)
 
   vm.get = (url, timeout, options)=>{
     let deferred = $q.defer();
-    if (typeof options === 'undefined') var options = {};
+    if (typeof options === 'undefined') options = {};
     options.timeout = deferred.promise;
     $http.get(url, options).success(function (data) {
       try {
