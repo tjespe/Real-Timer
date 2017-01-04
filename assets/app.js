@@ -33,25 +33,27 @@ app.controller('masterCtrl', ['$http', '$chttp', '$timeout', function ($http, $c
 
   let geo_success = (position)=>{
     console.log(position);
-    vm.conv.then(()=>{
-      vm.coords = convert(position.coords.latitude, position.coords.longitude);
-      vm.status = "Laster inn data…";
-      $chttp.get('//real-timer-server.tk/cors.php?url=reisapi.ruter.no%2FPlace%2FGetClosestPlacesExtension%3Fcoordinates%3Dx%3D'+Math.round(vm.coords[0])+'%2Cy%3D'+Math.round(vm.coords[1])+'%26proposals%3D12', 0).then(function (data) {
-        vm.success = true;
-        vm.data = data;
-        for (let i = 0; i < vm.data.length; i++) {
-          setValues(vm.data[i]);
-          if (vm.data[i].PlaceType == 'Area') {
-            for (var j = 0; j < vm.data[i].Stops.length; j++) {
-              setValues(vm.data[i].Stops[j]);
+    if (position.coords.accuracy < 1000) {
+      vm.conv.then(()=>{
+        vm.coords = convert(position.coords.latitude, position.coords.longitude);
+        vm.status = "Laster inn data…";
+        $chttp.get('//real-timer-server.tk/cors.php?url=reisapi.ruter.no%2FPlace%2FGetClosestPlacesExtension%3Fcoordinates%3Dx%3D'+Math.round(vm.coords[0])+'%2Cy%3D'+Math.round(vm.coords[1])+'%26proposals%3D12', 0).then(function (data) {
+          vm.success = true;
+          vm.data = data;
+          for (let i = 0; i < vm.data.length; i++) {
+            setValues(vm.data[i]);
+            if (vm.data[i].PlaceType == 'Area') {
+              for (var j = 0; j < vm.data[i].Stops.length; j++) {
+                setValues(vm.data[i].Stops[j]);
+              }
             }
           }
-        }
-      }).catch(()=>{
-        vm.status = "Kunne ikke laste inn data.";
+        }).catch(()=>{
+          vm.status = "Kunne ikke laste inn data.";
+        });
       });
-    });
-    navigator.geolocation.clearWatch(vm.wpid);
+      navigator.geolocation.clearWatch(vm.wpid);
+    }
   }
   let geo_error = ()=>{
     vm.status = "Fikk ikke tilgang til stedstjenester";
