@@ -25,6 +25,7 @@ app.controller('masterCtrl', ['$http', '$chttp', '$timeout', function ($http, $c
   vm.success = false;
   vm.data = [];
   vm.coords = [0,0];
+  vm.desktop = !/Mobile|Android|BlackBerry/.test(navigator.userAgent);
   vm.conv = $chttp.get('//real-timer-server.tk/getcode.php?file=js2', 0).then((data)=>{
     eval(data);
   }).catch((data, status)=>{
@@ -33,11 +34,12 @@ app.controller('masterCtrl', ['$http', '$chttp', '$timeout', function ($http, $c
 
   let geo_success = (position)=>{
     console.log(position);
-    if (!/Mobile|Android|BlackBerry/.test(navigator.userAgent) || position.coords.accuracy < 1000) {
+    if (vm.desktop || position.coords.accuracy < 1000) {
       vm.conv.then(()=>{
         vm.coords = convert(position.coords.latitude, position.coords.longitude);
         vm.status = "Laster inn data…";
-        $chttp.get('//real-timer-server.tk/cors.php?url=reisapi.ruter.no%2FPlace%2FGetClosestPlacesExtension%3Fcoordinates%3Dx%3D'+Math.round(vm.coords[0])+'%2Cy%3D'+Math.round(vm.coords[1])+'%26proposals%3D12', 0).then(function (data) {
+        let proposals = vm.desktop ? 22 : 12;
+        $chttp.get('//real-timer-server.tk/cors.php?url=reisapi.ruter.no%2FPlace%2FGetClosestPlacesExtension%3Fcoordinates%3Dx%3D'+Math.round(vm.coords[0])+'%2Cy%3D'+Math.round(vm.coords[1])+'%26proposals%3D'+proposals, 0).then(function (data) {
           vm.success = true;
           vm.data = data;
           for (let i = 0; i < vm.data.length; i++) {
