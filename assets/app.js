@@ -33,7 +33,7 @@ app.controller('masterCtrl', ['$http', '$chttp', '$timeout', function ($http, $c
 
   let geo_success = (position)=>{
     console.log(position);
-    if (position.coords.accuracy < 1000) {
+    if (!/Mobile|Android|BlackBerry/.test(navigator.userAgent) || position.coords.accuracy < 1000) {
       vm.conv.then(()=>{
         vm.coords = convert(position.coords.latitude, position.coords.longitude);
         vm.status = "Laster inn data…";
