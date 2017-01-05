@@ -80,7 +80,7 @@ app.controller('masterCtrl', ['$http', '$chttp', '$timeout', function ($http, $c
     if (typeof j === 'undefined') return toggleValues(vm.data[i]);
     return toggleValues(vm.data[i].Stops[j]);
   };
-  $chttp.get('//real-timer-server.tk/getcode.php?file=glyphicons.css', 0).then((data)=>{
+  $chttp.get('//real-timer-server.tk/getcode.php?file=glyphicons.min.css', 0).then((data)=>{
     vm.css += data;
   });
   $chttp.get('//static.thorin-games.tk/css/ubuntu.php', 0).then((data)=>{
