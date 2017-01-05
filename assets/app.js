@@ -1,6 +1,6 @@
 let app = angular.module('app', []);
 
-app.config(["$sceProvider", '$controllerProvider', '$provide', '$sceDelegateProvider', function($sceProvider, $controllerProvider, $provide, $sceDelegateProvider) {
+app.config(["$sceProvider", '$controllerProvider', '$provide', '$sceDelegateProvider', '$compileProvider', function($sceProvider, $controllerProvider, $provide, $sceDelegateProvider, $compileProvider) {
   $sceDelegateProvider.resourceUrlWhitelist([
     'self',
     'https://static.thorin-games.tk/**',
@@ -10,9 +10,15 @@ app.config(["$sceProvider", '$controllerProvider', '$provide', '$sceDelegateProv
   ]);
   $sceProvider.enabled(true);
 
-  // Provider-based controller.
+  // Provider-based controller to enable lazy loading of controllers.
   app.controller = function( name, constructor ) {
     $controllerProvider.register( name, constructor );
+    return( this );
+  };
+
+  // Provider-based directive to enable lazy loading of directives.
+  app.directive = function( name, factory ) {
+    $compileProvider.directive( name, factory );
     return( this );
   };
 }]);
