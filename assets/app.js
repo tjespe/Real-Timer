@@ -83,7 +83,7 @@ app.controller('masterCtrl', ['$http', '$chttp', '$timeout', function ($http, $c
   $chttp.get('//real-timer-server.tk/getcode.php?file=glyphicons.min.css', 0).then((data)=>{
     vm.css += data;
   });
-  $chttp.get('//static.thorin-games.tk/css/ubuntu.php', 0).then((data)=>{
+  $chttp.get('//real-timer-server.tk/getcode.php?file=ubuntu.css', 0).then((data)=>{
     vm.css += data;
   });
   vm.jq = $chttp.get('https://code.jquery.com/jquery-3.1.1.min.js', 0);
