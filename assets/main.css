@@ -81,3 +81,6 @@ iframe {
 .content-row>*:last-child {
   text-align: right;
 }
+.show {
+  display: block !important;
+}

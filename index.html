@@ -19,7 +19,7 @@
 
   <div class="content padded" ng-if="!m.success" ng-bind="m.status" style="height:18px;">Laster inn…</div>
 
-  <div ng-repeat="(index, object) in m.data" ng-if="m.success" style="display:none;" ng-show="m.success">
+  <div ng-repeat="(index, object) in m.data" ng-if="m.success" style="display:none;" ng-class="{show: m.success}">
     <div class="content stop content-row-wrapper" ng-if="object.PlaceType == 'Stop'" ng-class="{'expanded':object.expanded, 'impanded':!object.expanded}">
       <div class="content-row" ng-click="m.toggle(index)">
         <div ng-bind="object.Name"></div>
