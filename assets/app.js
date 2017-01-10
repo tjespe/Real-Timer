@@ -32,7 +32,7 @@ app.controller('masterCtrl', ['$http', '$chttp', '$timeout', function ($http, $c
   vm.data = [];
   vm.coords = [0,0];
   vm.desktop = !/Mobile|Android|BlackBerry/.test(navigator.userAgent);
-  vm.conv = $chttp.get('//real-timer-server.tk/getcode.php?file=converter.min.js', 0).then((data)=>{
+  vm.conv = $chttp.get('assets/converter.min.js', 0).then((data)=>{
     eval(data);
   }).catch((data, status)=>{
     vm.status = "Vennligst oppdater siden";
@@ -80,10 +80,10 @@ app.controller('masterCtrl', ['$http', '$chttp', '$timeout', function ($http, $c
     if (typeof j === 'undefined') return toggleValues(vm.data[i]);
     return toggleValues(vm.data[i].Stops[j]);
   };
-  $chttp.get('//real-timer-server.tk/getcode.php?file=glyphicons.min.css', 0).then((data)=>{
+  $chttp.get('assets/glyphicons.min.css', 0).then((data)=>{
     vm.css += data;
   });
-  $chttp.get('//real-timer-server.tk/getcode.php?file=ubuntu.css', 0).then((data)=>{
+  $chttp.get('assets/ubuntu.css', 0).then((data)=>{
     vm.css += data;
   });
   vm.jq = $chttp.get('https://code.jquery.com/jquery-3.1.1.min.js', 0);
