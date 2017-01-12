@@ -52,11 +52,11 @@ app.controller('masterCtrl', ['$http', '$chttp', '$timeout', function ($http, $c
             setValues(vm.data[i]);
             if (vm.data[i].PlaceType == 'Area') {
               for (var j = 0; j < vm.data[i].Stops.length; j++) {
-                if (vm.data[i].Stops[j].Name.indexOf(vm.data[i].Name) == -1) {
+                if (vm.data[i].Stops[j].Name.indexOf(vm.data[i].Name.substr(0, 5)) === -1) {
                   vm.data.splice(i, 0, vm.data[i].Stops[j]);
                   setValues(vm.data[i]);
                   i++;
-                  vm.data[i].Stops.splice(j);
+                  vm.data[i].Stops.splice(j, 1);
                 } else {
                   setValues(vm.data[i].Stops[j]);
                 }
