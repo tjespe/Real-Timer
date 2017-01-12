@@ -23,7 +23,7 @@ app.config(["$sceProvider", '$controllerProvider', '$provide', '$sceDelegateProv
   };
 }]);
 
-app.controller('masterCtrl', ['$http', '$chttp', '$timeout', function ($http, $chttp, $timeout) {
+app.controller('masterCtrl', ['$http', '$chttp', '$timeout', '$interval', function ($http, $chttp, $timeout, $interval) {
   let vm = this;
   vm.css = "";
   vm.jqLoaded = false;
@@ -93,6 +93,7 @@ app.controller('masterCtrl', ['$http', '$chttp', '$timeout', function ($http, $c
       geo_error();
     }
   }
+  get_position();
   vm.toggle = (i, j)=>{
     if (typeof j === 'undefined') return toggleValues(vm.data[i]);
     return toggleValues(vm.data[i].Stops[j]);
