@@ -4,7 +4,7 @@ app.config(["$sceProvider", '$controllerProvider', '$provide', '$sceDelegateProv
   $sceDelegateProvider.resourceUrlWhitelist([
     'self',
     'https://static.thorin-games.tk/**',
-    'https://thorin-apps.tk/**',
+    'https://static.bris.tk/**',
     'https://real-timer-server.tk/**',
     'https://ruter.no/**'
   ]);
@@ -45,7 +45,7 @@ app.controller('masterCtrl', ['$http', '$chttp', '$timeout', function ($http, $c
         vm.coords = convert(position.coords.latitude, position.coords.longitude);
         vm.status = "Laster inn data…";
         let proposals = vm.desktop ? 22 : 12;
-        $chttp.get('//real-timer-server.tk/cors.php?url=reisapi.ruter.no%2FPlace%2FGetClosestPlacesExtension%3Fcoordinates%3Dx%3D'+Math.round(vm.coords[0])+'%2Cy%3D'+Math.round(vm.coords[1])+'%26proposals%3D'+proposals, 0).then(function (data) {
+        $chttp.get('//static.bris.tk/cors/cors.php?url=reisapi.ruter.no%2FPlace%2FGetClosestPlacesExtension%3Fcoordinates%3Dx%3D'+Math.round(vm.coords[0])+'%2Cy%3D'+Math.round(vm.coords[1])+'%26proposals%3D'+proposals, 0).then(function (data) {
           vm.success = true;
           vm.data = data;
           for (let i = 0; i < vm.data.length; i++) {
