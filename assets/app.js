@@ -52,7 +52,13 @@ app.controller('masterCtrl', ['$http', '$chttp', '$timeout', function ($http, $c
             setValues(vm.data[i]);
             if (vm.data[i].PlaceType == 'Area') {
               for (var j = 0; j < vm.data[i].Stops.length; j++) {
-                setValues(vm.data[i].Stops[j]);
+                if (vm.data[i].Stops[j].Name.indexOf(vm.data[i].Name) == -1) {
+                  vm.data.splice(vm.data, i, vm.data[i].Stops[j]);
+                  setValues(vm.data[i]);
+                  vm.data[i].Stops.splice(j);
+                } else {
+                  setValues(vm.data[i].Stops[j]);
+                }
               }
             }
           }
