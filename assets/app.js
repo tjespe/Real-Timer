@@ -81,14 +81,17 @@ app.controller('masterCtrl', ['$http', '$chttp', '$timeout', function ($http, $c
     maximumAge        : 0,
     timeout           : 5000
   }
-  if ('geolocation' in navigator) {
-    if ('onLine' in navigator && !navigator.onLine) {
-      vm.status = "Du er ikke koblet til internett. Vennligst koble til internett for å laste inn sanntidsinformasjon.";
+  let get_position = ()=>{
+    if ('geolocation' in navigator) {
+      if ('onLine' in navigator && !navigator.onLine) {
+        vm.status = "Du er ikke koblet til internett. Vennligst koble til internett for å laste inn sanntidsinformasjon.";
+        $interval(get_position, 1500);
+      } else {
+        vm.wpid = navigator.geolocation.watchPosition(geo_success, geo_error, geo_options);
+      }
     } else {
-      vm.wpid = navigator.geolocation.watchPosition(geo_success, geo_error, geo_options);
+      geo_error();
     }
-  } else {
-    geo_error();
   }
   vm.toggle = (i, j)=>{
     if (typeof j === 'undefined') return toggleValues(vm.data[i]);
