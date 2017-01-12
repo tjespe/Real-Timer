@@ -82,7 +82,11 @@ app.controller('masterCtrl', ['$http', '$chttp', '$timeout', function ($http, $c
     timeout           : 5000
   }
   if ('geolocation' in navigator) {
-    vm.wpid = navigator.geolocation.watchPosition(geo_success, geo_error, geo_options);
+    if ('onLine' in navigator && !navigator.onLine) {
+      vm.status = "Du er ikke koblet til internett. Vennligst koble til internett for å laste inn sanntidsinformasjon.";
+    } else {
+      vm.wpid = navigator.geolocation.watchPosition(geo_success, geo_error, geo_options);
+    }
   } else {
     geo_error();
   }

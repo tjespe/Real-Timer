@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html ng-app="app" ng-controller="masterCtrl as m" lang="no">
+<html ng-app="app" ng-controller="masterCtrl as m" lang="no" manifest="manifest.appcache">
 <head>
   <meta charset="utf-8">
   <title>Real-Timer — Den raskeste måten å sjekke når kollektivtransporten kommer</title>
@@ -17,7 +17,7 @@
   </header>
   <spacer></spacer>
 
-  <div class="content padded" ng-if="!m.success" ng-bind="m.status" style="height:18px;">Fikk ikke tilgang til stedstjenester</div>
+  <div class="content padded" ng-if="!m.success" ng-bind="m.status">Fikk ikke tilgang til stedstjenester</div>
 
   <div ng-repeat="(index, object) in m.data" ng-if="m.success" style="display:none;" ng-class="{show: m.success}">
     <div class="content stop content-row-wrapper" ng-if="object.PlaceType == 'Stop'" ng-class="{'expanded':object.expanded, 'impanded':!object.expanded}">

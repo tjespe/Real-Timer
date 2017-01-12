@@ -58,8 +58,7 @@ iframe {
   min-height: 45px;
 }
 .padded {
-  padding-bottom: 30px;
-  padding-top: 30px;
+  padding: 30px 10px;
   min-height: initial !important;
 }
 .content-row {
