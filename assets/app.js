@@ -3,10 +3,7 @@ let app = angular.module('app', []);
 app.config(["$sceProvider", '$controllerProvider', '$provide', '$sceDelegateProvider', '$compileProvider', function($sceProvider, $controllerProvider, $provide, $sceDelegateProvider, $compileProvider) {
   $sceDelegateProvider.resourceUrlWhitelist([
     'self',
-    'https://static.thorin-games.tk/**',
-    'https://static.bris.tk/**',
-    'https://real-timer-server.tk/**',
-    'https://ruter.no/**'
+    'https://static.bris.tk/**'
   ]);
   $sceProvider.enabled(true);
 
@@ -31,6 +28,7 @@ app.controller('masterCtrl', ['$http', '$chttp', '$timeout', '$interval', functi
   vm.success = false;
   vm.data = [];
   vm.coords = [0,0];
+	vm.retryInterval;
   vm.desktop = !/Mobile|Android|BlackBerry/.test(navigator.userAgent);
   vm.conv = $chttp.get('assets/converter.min.js', 0).then((data)=>{
     eval(data);
@@ -51,7 +49,7 @@ app.controller('masterCtrl', ['$http', '$chttp', '$timeout', '$interval', functi
           for (let i = 0; i < vm.data.length; i++) {
             setValues(vm.data[i]);
             if (vm.data[i].PlaceType == 'Area') {
-              for (var j = 0; j < vm.data[i].Stops.length; j++) {
+              for (let j = 0; j < vm.data[i].Stops.length; j++) {
                 if (vm.data[i].Stops[j].Name.indexOf(vm.data[i].Name.substr(0, 5)) === -1) {
                   vm.data.splice(i, 0, vm.data[i].Stops[j]);
                   setValues(vm.data[i]);
@@ -70,7 +68,7 @@ app.controller('masterCtrl', ['$http', '$chttp', '$timeout', '$interval', functi
           vm.status = "Kunne ikke laste inn data.";
         });
       });
-      navigator.geolocation.clearWatch(vm.wpid);
+			$timeout(navigator.geolocation.clearWatch, 100, true, vm.wpid);
     }
   }
   let geo_error = ()=>{
@@ -85,9 +83,10 @@ app.controller('masterCtrl', ['$http', '$chttp', '$timeout', '$interval', functi
     if ('geolocation' in navigator) {
       if ('onLine' in navigator && !navigator.onLine) {
         vm.status = "Du er ikke koblet til internett. Vennligst koble til internett for å laste inn sanntidsinformasjon.";
-        $interval(get_position, 1500);
+        vm.retryInterval = $interval(get_position, 1500);
       } else {
         vm.wpid = navigator.geolocation.watchPosition(geo_success, geo_error, geo_options);
+				$interval.cancel(vm.retryInterval);
       }
     } else {
       geo_error();
