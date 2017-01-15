@@ -68,7 +68,7 @@ app.controller('masterCtrl', ['$http', '$chttp', '$timeout', '$interval', functi
           vm.status = "Kunne ikke laste inn data.";
         });
       });
-			$timeout(navigator.geolocation.clearWatch, 100, true, vm.wpid);
+			navigator.geolocation.clearWatch(vm.wpid);
     }
   }
   let geo_error = ()=>{
