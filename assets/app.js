@@ -3,7 +3,7 @@ let app = angular.module('app', []);
 app.config(["$sceProvider", '$controllerProvider', '$provide', '$sceDelegateProvider', '$compileProvider', function($sceProvider, $controllerProvider, $provide, $sceDelegateProvider, $compileProvider) {
   $sceDelegateProvider.resourceUrlWhitelist([
     'self',
-    'https://static.bris.tk/**'
+    'https://script.google.com/**'
   ]);
   $sceProvider.enabled(true);
 
@@ -43,7 +43,7 @@ app.controller('masterCtrl', ['$http', '$chttp', '$timeout', '$interval', functi
         vm.coords = convert(position.coords.latitude, position.coords.longitude);
         vm.status = "Laster inn data…";
         let proposals = vm.desktop ? 22 : 12;
-        $chttp.get('//static.bris.tk/cors/cors.php?url=reisapi.ruter.no%2FPlace%2FGetClosestPlacesExtension%3Fcoordinates%3Dx%3D'+Math.round(vm.coords[0])+'%2Cy%3D'+Math.round(vm.coords[1])+'%26proposals%3D'+proposals, 0).then(function (data) {
+        $chttp.get('//script.google.com/macros/s/AKfycbzQ4aytAhVinfiYxMy2G-4whWFXv1V1YIbc1LE8KQPZcQQT6Odi/exec?url=reisapi.ruter.no%2FPlace%2FGetClosestPlacesExtension%3Fcoordinates%3Dx%3D'+Math.round(vm.coords[0])+'%2Cy%3D'+Math.round(vm.coords[1])+'%26proposals%3D'+proposals, 0).then(function (data) {
           vm.success = true;
           vm.data = data;
           for (let i = 0; i < vm.data.length; i++) {
