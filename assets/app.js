@@ -20,7 +20,7 @@ app.config(["$sceProvider", '$controllerProvider', '$provide', '$sceDelegateProv
   };
 }]);
 
-app.controller('masterCtrl', ['$http', '$chttp', '$timeout', '$interval', function ($http, $chttp, $timeout, $interval) {
+app.controller('masterCtrl', ['$http', '$chttp', '$timeout', '$interval', '$q', function ($http, $chttp, $timeout, $interval, $q) {
   let vm = this;
   vm.css = "";
   vm.jqLoaded = false;
@@ -35,6 +35,7 @@ app.controller('masterCtrl', ['$http', '$chttp', '$timeout', '$interval', functi
   }).catch((data, status)=>{
     vm.status = "Vennligst oppdater siden";
   });
+  vm.canceler = $q.defer();
 
   let geo_success = (position)=>{
     console.log(position);
@@ -42,7 +43,7 @@ app.controller('masterCtrl', ['$http', '$chttp', '$timeout', '$interval', functi
       vm.coords = convert(position.coords.latitude, position.coords.longitude);
       vm.status = "Laster inn data…";
       let proposals = vm.desktop ? 22 : 12;
-      $chttp.get('//script.google.com/macros/s/AKfycbzQ4aytAhVinfiYxMy2G-4whWFXv1V1YIbc1LE8KQPZcQQT6Odi/exec?url=reisapi.ruter.no%2FPlace%2FGetClosestPlacesExtension%3Fcoordinates%3Dx%3D'+Math.round(vm.coords[0])+'%2Cy%3D'+Math.round(vm.coords[1])+'%26proposals%3D'+proposals, 0).then(function (data) {
+      $chttp.get('//script.google.com/macros/s/AKfycbzQ4aytAhVinfiYxMy2G-4whWFXv1V1YIbc1LE8KQPZcQQT6Odi/exec?url=reisapi.ruter.no%2FPlace%2FGetClosestPlacesExtension%3Fcoordinates%3Dx%3D'+Math.round(vm.coords[0])+'%2Cy%3D'+Math.round(vm.coords[1])+'%26proposals%3D'+proposals, 0, {}, vm.canceler.promise).then(function (data) {
         vm.success = true;
         vm.data = data;
         for (let i = 0; i < vm.data.length; i++) {
@@ -136,6 +137,7 @@ app.controller('masterCtrl', ['$http', '$chttp', '$timeout', '$interval', functi
   }
   function toggleValues(obj) {
     navigator.geolocation.clearWatch(vm.wpid);
+    vm.canceler.resolve();
     obj.expanded = !obj.expanded;
     obj.hasExpanded = true;
   }
@@ -166,6 +168,12 @@ app.service('$chttp', ['$http', '$q', '$timeout', function ($http, $q, $timeout)
         } catch (e) {console.warn(e);}
       }, timeout);
     }
+    if (typeof extra_promise !== "undefined") {
+      extra_promise.catch(()=>{
+        deferred.reject("Canceled");
+      });
+    }
+
     return deferred.promise;
   }
 }]);
