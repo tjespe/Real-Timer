@@ -3,6 +3,12 @@ body {
   margin: 0;
   background-color: #333;
   color: #333;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 header {
   width: 100%;
@@ -30,26 +36,8 @@ spacer {
     height: 20px;
   }
 }
-.stop.impanded>iframe {
-  height: 0 !important;
-  min-height: 0 !important;
-  max-height: 0 !important;
-}
 .area.impanded>.stop {
   height: 0 !important;
-}
-.stop.impanded>.content-row {
-  margin-bottom: -15px;
-}
-iframe {
-  border: 0;
-  height: 0;
-  width: 100%;
-  max-width: 500px;
-  transition: height 0.25s ease-in-out;
-  border-radius: 7.5px;
-  margin-bottom: -5px;
-  min-height: 40px;
 }
 .content {
   width: 90%;
@@ -89,4 +77,82 @@ iframe {
 }
 .show {
   display: block !important;
+}
+widget {
+  background: #333333;
+  display: block;
+  color: #ccc;
+  border-radius: 7.5px;
+  padding: 5px;
+  font-size:0.9em;
+}
+.top-bar {
+  display: flex;
+  margin: 0 10px;
+  justify-content: space-between;
+}
+.top-bar div {
+  height: 32px;
+  line-height: 32px;
+}
+.update {
+  color: #333;
+  border-radius: 5px;
+  min-width: 100px;
+}
+.update.clickable {
+  cursor:pointer;
+}
+.heading, .update.clickable {
+  color: #333;
+  background-color: #ccc;
+  font-size: 1.1em;
+}
+.update.clickable::before {
+  content: "↻ ";
+  font-weight: 700;
+}
+ul {
+  padding-left: 0;
+  max-width: 100%;
+  margin: 10px;
+  list-style-type:none;
+  text-align: left;
+}
+li {
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  padding: 5px;
+  margin-bottom: 10px;
+}
+.heading {
+  padding: 2px 7.5px;
+  font-variant: small-caps;
+  letter-spacing: 2px;
+  border-radius: 7px 7px 0 0;
+  margin: -5px -5px 0 -5px;
+}
+.list {
+  padding: 8px;
+  color: #fed100;
+}
+.item {
+  margin-right: 10px;
+}
+.item.white {
+  color:#ccc;
+}
+a.check {
+  display:none;
+}
+.deviation>a {
+  color: #fed100;
+}
+.deviation>a::before {
+  content: "⚠ ";
+  margin: 0 5px 0 7.5px;
+}
+c {
+  text-align: center;
+  display:block;
 }

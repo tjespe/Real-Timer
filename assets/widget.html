@@ -1,3 +1,5 @@
-<div class="widget">
-
+<div class="top-bar">
+  <div class="update" ng-click="w.update()" ng-class="{clickable: !w.loading}">Oppdater</div>
+  <div class="timestamp" ng-bind-html="w.timestamp"></div>
 </div>
+<ul ng-bind-html="w.content" class="widget-content"></ul>

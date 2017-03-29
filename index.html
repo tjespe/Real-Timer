@@ -19,26 +19,14 @@
 
   <div class="content padded" ng-if="!m.success" ng-bind="m.status">Fikk ikke tilgang til stedstjenester</div>
 
-  <div ng-repeat="(index, object) in m.data track by $index" ng-if="m.success" style="display:none;" ng-class="{show: m.success}">
-    <div class="content stop content-row-wrapper" ng-if="object.PlaceType == 'Stop'" ng-class="{'expanded':object.expanded, 'impanded':!object.expanded}">
-      <div class="content-row" ng-click="m.toggle(index)">
-        <div ng-bind="object.Name"></div>
+  <div ng-repeat="(index, object) in m.data track by $index" ng-if="m.success">
+    <div class="content stop content-row-wrapper" ng-if="object.PlaceType == 'Stop'" ng-init="stop = object" ng-include="'assets/content-row.html'"></div>
+    <div class="content area content-row-wrapper" ng-if="object.PlaceType == 'Area'">
+      <div class="content-row" ng-click="object.expanded = !object.expanded; object.hasExpanded = true; m.clearWatch()">
+        <div ng-bind="object.Name+':'"></div>
         <div class="glyphicon" ng-if="m.jqLoaded" ng-class="{'glyphicon-chevron-up':object.expanded, 'glyphicon-chevron-down':!object.expanded}"></div>
       </div>
-      <iframe ng-if="index <= 5 || object.hasExpanded" id="{{object.ID}}" style="{{'height:'+object.height}}" ng-src="{{'/assets/legacy-widget.html#('+object.ID+')'+object.Name+'%20('+object.District+')'}}"></iframe>
-    </div>
-    <div class="content area content-row-wrapper" ng-if="object.PlaceType == 'Area'" ng-class="{'expanded':object.expanded, 'impanded':!object.expanded}">
-      <div class="content-row" ng-click="m.toggle(index)">
-        <div ng-bind="object.Name"></div>
-        <div class="glyphicon" ng-if="m.jqLoaded" ng-class="{'glyphicon-chevron-up':object.expanded, 'glyphicon-chevron-down':!object.expanded}"></div>
-      </div>
-      <div class="stop content-row-wrapper" ng-repeat="(key, stop) in object.Stops track by $index" ng-class="{'expanded':stop.expanded, 'impanded':!stop.expanded}">
-        <div class="content-row" ng-click="m.toggle(index, key)">
-          <div ng-bind="stop.Name"></div>
-          <div class="glyphicon" ng-if="m.jqLoaded" ng-class="{'glyphicon-chevron-up':stop.expanded, 'glyphicon-chevron-down':!stop.expanded}"></div>
-        </div>
-        <iframe ng-if="index <= 5 || object.hasExpanded" id="{{stop.ID}}" style="{{'height:'+stop.height}}" ng-src="{{'/assets/legacy-widget.html#('+stop.ID+')'+stop.Name+'%20('+stop.District+')'}}"></iframe>
-      </div>
+      <div ng-show="object.expanded" class="stop content-row-wrapper" ng-repeat="(key, stop) in object.Stops track by $index" ng-include="'assets/content-row.html'"></div>
     </div>
   </div>
 
@@ -46,6 +34,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.0/angular.min.js"></script>
   <link rel="stylesheet" href="assets/main.css">
   <script src="assets/app.js"></script>
+  <script src="assets/widget.js"></script>
   <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),

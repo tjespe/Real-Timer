@@ -1,11 +1,7 @@
 let app = angular.module('app', []);
 
 app.config(["$sceProvider", '$controllerProvider', '$provide', '$sceDelegateProvider', '$compileProvider', function($sceProvider, $controllerProvider, $provide, $sceDelegateProvider, $compileProvider) {
-  $sceDelegateProvider.resourceUrlWhitelist([
-    'self',
-    'https://script.google.com/**'
-  ]);
-  $sceProvider.enabled(true);
+  $sceProvider.enabled(false);
 
   // Provider-based controller to enable lazy loading of controllers.
   app.controller = function( name, constructor ) {
@@ -30,20 +26,20 @@ app.controller('masterCtrl', ['$http', '$chttp', '$timeout', '$interval', '$q', 
   vm.data = [];
   vm.coords = [0,0];
 	vm.retryInterval;
-  vm.desktop = !/Mobile|Android|BlackBerry/.test(navigator.userAgent);
   vm.conv = $chttp.get('assets/converter.min.js', 0).then((data)=>{
     eval(data);
   }).catch((data, status)=>{
-    vm.status = "Please refresh the page";
+    vm.status = "Vennligst oppdater siden";
   });
   vm.canceler = $q.defer();
+  vm.loadLimit = 5;
 
   let geo_success = (position)=>{
     console.log(position);
     vm.conv.then(()=>{
       vm.coords = convert(position.coords.latitude, position.coords.longitude);
       vm.status = "Laster inn data…";
-      let proposals = vm.desktop ? 22 : 12;
+      let proposals = 22;
       $chttp.get('//script.google.com/macros/s/AKfycbzQ4aytAhVinfiYxMy2G-4whWFXv1V1YIbc1LE8KQPZcQQT6Odi/exec?url=reisapi.ruter.no%2FPlace%2FGetClosestPlacesExtension%3Fcoordinates%3Dx%3D'+Math.round(vm.coords[0])+'%2Cy%3D'+Math.round(vm.coords[1])+'%26proposals%3D'+proposals, 0, {}, vm.canceler.promise).then(function (data) {
         if (!vm.userTapped) {
         vm.success = true;
@@ -94,52 +90,23 @@ app.controller('masterCtrl', ['$http', '$chttp', '$timeout', '$interval', '$q', 
     }
   }
   get_position();
-  vm.toggle = (i, j)=>{
-    vm.userTapped = true;
-    if (typeof j === 'undefined') return toggleValues(vm.data[i]);
-    return toggleValues(vm.data[i].Stops[j]);
-  };
   $chttp.get('assets/glyphicons.min.css', 0).then((data)=>vm.css += data);
   $chttp.get('assets/ubuntu.css', 0).then((data)=>vm.css += data);
   vm.jq = $chttp.get('https://code.jquery.com/jquery-3.1.1.min.js', 0);
   vm.jq.then((data)=>{
     eval(data);
     vm.jqLoaded = true;
-    let eventMethod = window.addEventListener ? "addEventListener" : "attachEvent";
-    let eventer = window[eventMethod];
-    let messageEvent = eventMethod == "attachEvent" ? "onmessage" : "message";
-    eventer(messageEvent, function(e) {
-      if (typeof e.data === "string" && e.data.indexOf(",")>-1) {
-        let id = e.data.split(',')[0];
-        let height = e.data.split(',')[1]+"px";
-        for (let i = 0; i < vm.data.length; i++) {
-          if (vm.data[i].ID == id) {
-            $timeout(()=>{
-              vm.data[i].height = height;
-            }, 0);
-          } else if (vm.data[i].PlaceType == "Area") {
-            for (let j = 0; j < vm.data[i].Stops.length; j++) {
-              if (vm.data[i].Stops[j].ID == id) {
-                $timeout(()=>{
-                  vm.data[i].Stops[j].height = height;
-                }, 0);
-              }
-            }
-          }
-        }
-      }
-    }, false);
   });
+  $interval(()=>vm.loadLimit++, 5);
+  vm.clearWatch = ()=>{
+    vm.userTapped = true;
+    navigator.geolocation.clearWatch(vm.wpid);
+    vm.canceler.resolve();
+  };
   function setValues(obj) {
     obj.expanded = false;
     obj.hasExpanded = false;
     obj.height = "25px";
-  }
-  function toggleValues(obj) {
-    navigator.geolocation.clearWatch(vm.wpid);
-    vm.canceler.resolve();
-    obj.expanded = !obj.expanded;
-    obj.hasExpanded = true;
   }
 }]);
 

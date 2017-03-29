@@ -1,9 +1,27 @@
-app.directive(['$http', '$chttp', function ($http, $chttp) {
+app.directive('widget', ['$http', '$chttp', function ($http, $chttp) {
   return {
-    restrict: 'E',
-    templateUrl: '//real-timer-server.tk/getcode.php?file=widget',
-    link: function (scope, element) {
-      // code ...
-    }
+    templateUrl: '/assets/widget.html',
+    controller: function ($scope, $element, $attrs) {
+      let vm = this;
+      vm.url = "https://reiseplanlegger-ekstern.ruter.no/no/Sanntid/For/("+$scope.stop.ID+")"+$scope.stop.Name+"%20("+$scope.stop.District+")?x-requested-with=XMLHttpRequest";
+      vm.content = "<c>Laster inn...</c><br><br><br>";
+      vm.timestamp = "";
+      vm.loading = false;
+      vm.update = ()=>{
+        vm.loading = true;
+        $http.get(vm.url+"&d="+Date.now()).success((data)=>{
+          vm.loading = false;
+          vm.content = $(data).find("ul").html() || $(data).find(".travelresultsNone").html();
+          vm.timestamp = $(data).find(".time").html();
+        }).error(vm.throwError);
+      };
+      vm.throwError = (data, e)=>{
+        console.log(data, e);
+        vm.content = "En feil har oppstått, prøv å laste inn på nytt. Status: "+e;
+        vm.loading = false;
+      };
+      vm.update();
+    },
+    controllerAs: 'w'
   }
 }]);
