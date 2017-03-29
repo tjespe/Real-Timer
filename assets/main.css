@@ -2,6 +2,7 @@ body {
   font-family: ubuntu, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   margin: 0;
   background-color: #333;
+  color: #333;
 }
 header {
   width: 100%;
@@ -9,9 +10,13 @@ header {
   margin: auto;
   border: 1px solid #CCC;
   letter-spacing: 1px;
-  height: 66px;
+  height: 40px;
   text-align: center;
   z-index: 1000;
+}
+h2 {
+  margin-top: 6px;
+  font-weight: 100;
 }
 spacer {
   margin-bottom: 35px;
@@ -22,7 +27,7 @@ spacer {
   }
   spacer {
     display: block;
-    height: 50px;
+    height: 20px;
   }
 }
 .stop.impanded>iframe {
@@ -42,7 +47,7 @@ iframe {
   width: 100%;
   max-width: 500px;
   transition: height 0.25s ease-in-out;
-  border-radius: 15px;
+  border-radius: 7.5px;
   margin-bottom: -5px;
   min-height: 40px;
 }
@@ -51,11 +56,11 @@ iframe {
   background: #FEFEFE;
   overflow-y: hidden;
   border: 1px solid #CCC;
-  margin: 17.5px auto;
+  margin: 14.5px auto;
   text-align: center;
   max-width: 500px;
-  border-radius: 15px;
-  min-height: 45px;
+  border-radius: 7.5px;
+  min-height: 40px;
   min-width: 292px;
 }
 .padded {
@@ -64,7 +69,7 @@ iframe {
 }
 .content-row {
   display: flex;
-  padding: 12px;
+  padding: 10px;
   cursor: pointer;
   justify-content: space-between;
   transition: margin 0.25s ease-in-out;
