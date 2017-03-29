@@ -12,6 +12,9 @@ app.directive('widget', ['$http', '$chttp', function ($http, $chttp) {
         $http.get(vm.url+"&d="+Date.now()).success((data)=>{
           vm.loading = false;
           vm.content = $(data).find("ul").html() || $(data).find(".travelresultsNone").html();
+          vm.content = vm.content.replace(/href=\"\/no\/Avvik\/Avganger\/(\d+)\"/g, (str, id)=>{
+            return "href=\"https://ruter.no/avvik/avviksmelding?deviationid="+id+"\"";
+          });
           vm.timestamp = $(data).find(".time").html();
         }).error(vm.throwError);
       };
