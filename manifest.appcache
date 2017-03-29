@@ -10,7 +10,9 @@ assets/app.js
 assets/converter.min.js
 assets/glyphicons.min.css
 assets/ubuntu.css
-assets/legacy-widget.html
+assets/widget.html
+assets/widget.js
+assets/content-row.html
 https://code.jquery.com/jquery-3.1.1.min.js
 
 NETWORK:
