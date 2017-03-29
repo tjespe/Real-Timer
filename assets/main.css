@@ -79,6 +79,7 @@ iframe {
 }
 .content-row>*:first-child {
   text-align: left;
+  flex:3;
 }
 .content-row>* {
   text-align: center;
