@@ -26,6 +26,7 @@ app.controller('masterCtrl', ['$http', '$chttp', '$timeout', '$interval', '$q', 
   vm.jqLoaded = false;
   vm.status = "Lokaliserer…";
   vm.success = false;
+  vm.userTapped = false;
   vm.data = [];
   vm.coords = [0,0];
 	vm.retryInterval;
@@ -33,7 +34,7 @@ app.controller('masterCtrl', ['$http', '$chttp', '$timeout', '$interval', '$q', 
   vm.conv = $chttp.get('assets/converter.min.js', 0).then((data)=>{
     eval(data);
   }).catch((data, status)=>{
-    vm.status = "Vennligst oppdater siden";
+    vm.status = "Please refresh the page";
   });
   vm.canceler = $q.defer();
 
@@ -44,6 +45,7 @@ app.controller('masterCtrl', ['$http', '$chttp', '$timeout', '$interval', '$q', 
       vm.status = "Laster inn data…";
       let proposals = vm.desktop ? 22 : 12;
       $chttp.get('//script.google.com/macros/s/AKfycbzQ4aytAhVinfiYxMy2G-4whWFXv1V1YIbc1LE8KQPZcQQT6Odi/exec?url=reisapi.ruter.no%2FPlace%2FGetClosestPlacesExtension%3Fcoordinates%3Dx%3D'+Math.round(vm.coords[0])+'%2Cy%3D'+Math.round(vm.coords[1])+'%26proposals%3D'+proposals, 0, {}, vm.canceler.promise).then(function (data) {
+        if (!vm.userTapped) {
         vm.success = true;
         vm.data = data;
         for (let i = 0; i < vm.data.length; i++) {
@@ -63,6 +65,7 @@ app.controller('masterCtrl', ['$http', '$chttp', '$timeout', '$interval', '$q', 
               vm.data[i] = vm.data[i].Stops[0];
             }
           }
+        }
         }
       }).catch(()=>{
         vm.status = "Kunne ikke laste inn data.";
@@ -92,15 +95,12 @@ app.controller('masterCtrl', ['$http', '$chttp', '$timeout', '$interval', '$q', 
   }
   get_position();
   vm.toggle = (i, j)=>{
+    vm.userTapped = true;
     if (typeof j === 'undefined') return toggleValues(vm.data[i]);
     return toggleValues(vm.data[i].Stops[j]);
   };
-  $chttp.get('assets/glyphicons.min.css', 0).then((data)=>{
-    vm.css += data;
-  });
-  $chttp.get('assets/ubuntu.css', 0).then((data)=>{
-    vm.css += data;
-  });
+  $chttp.get('assets/glyphicons.min.css', 0).then((data)=>vm.css += data);
+  $chttp.get('assets/ubuntu.css', 0).then((data)=>vm.css += data);
   vm.jq = $chttp.get('https://code.jquery.com/jquery-3.1.1.min.js', 0);
   vm.jq.then((data)=>{
     eval(data);
