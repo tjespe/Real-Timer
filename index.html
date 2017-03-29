@@ -24,7 +24,7 @@
     <div class="content area content-row-wrapper" ng-if="object.PlaceType == 'Area'">
       <div class="content-row" ng-click="object.expanded = !object.expanded; object.hasExpanded = true; m.clearWatch()">
         <div ng-bind="object.Name+':'"></div>
-        <div class="glyphicon" ng-if="m.jqLoaded" ng-class="{'glyphicon-chevron-up':object.expanded, 'glyphicon-chevron-down':!object.expanded}"></div>
+        <div class="glyphicon glyphicon-option-vertical" ng-if="m.jqLoaded"></div>
       </div>
       <div ng-show="object.expanded" class="stop content-row-wrapper" ng-repeat="(key, stop) in object.Stops track by $index" ng-include="'assets/content-row.html'"></div>
     </div>
