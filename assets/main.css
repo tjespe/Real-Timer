@@ -36,9 +36,6 @@ spacer {
     height: 20px;
   }
 }
-.area.impanded>.stop {
-  height: 0 !important;
-}
 .content {
   width: 90%;
   background: #FEFEFE;
@@ -50,10 +47,6 @@ spacer {
   border-radius: 7.5px;
   min-height: 40px;
   min-width: 292px;
-}
-.padded {
-  padding: 30px 10px;
-  min-height: initial !important;
 }
 .content-row {
   display: flex;
