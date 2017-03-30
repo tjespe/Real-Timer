@@ -21,13 +21,6 @@
 
   <div ng-repeat="(index, object) in m.data track by $index" ng-if="m.success">
     <div class="content stop content-row-wrapper" ng-if="object.PlaceType == 'Stop'" ng-init="stop = object" ng-include="'assets/content-row.html'"></div>
-    <div class="content area content-row-wrapper" ng-if="object.PlaceType == 'Area'">
-      <div class="content-row" ng-click="object.expanded = !object.expanded; object.hasExpanded = true; m.clearWatch()">
-        <div ng-bind="object.Name+':'"></div>
-        <div class="glyphicon glyphicon-option-vertical" ng-if="m.jqLoaded"></div>
-      </div>
-      <div ng-show="object.expanded" class="stop content-row-wrapper" ng-repeat="(key, stop) in object.Stops track by $index" ng-include="'assets/content-row.html'"></div>
-    </div>
   </div>
 
 

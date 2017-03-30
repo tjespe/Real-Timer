@@ -42,27 +42,10 @@ app.controller('masterCtrl', ['$http', '$chttp', '$timeout', '$interval', '$q', 
       let proposals = 22;
       $chttp.get('//script.google.com/macros/s/AKfycbzQ4aytAhVinfiYxMy2G-4whWFXv1V1YIbc1LE8KQPZcQQT6Odi/exec?url=reisapi.ruter.no%2FPlace%2FGetClosestPlacesExtension%3Fcoordinates%3Dx%3D'+Math.round(vm.coords[0])+'%2Cy%3D'+Math.round(vm.coords[1])+'%26proposals%3D'+proposals, 0, {}, vm.canceler.promise).then(function (data) {
         if (!vm.userTapped) {
-        vm.success = true;
-        vm.data = data;
-        $interval(()=>vm.loadLimit++, 2000);
-        for (let i = 0; i < vm.data.length; i++) {
-          setValues(vm.data[i]);
-          if (vm.data[i].PlaceType == 'Area') {
-            for (let j = 0; j < vm.data[i].Stops.length; j++) {
-              if (vm.data[i].Stops[j].Name.indexOf(vm.data[i].Name.substr(0, 5)) === -1) {
-                vm.data.splice(i, 0, vm.data[i].Stops[j]);
-                setValues(vm.data[i]);
-                i++;
-                vm.data[i].Stops.splice(j, 1);
-              } else {
-                setValues(vm.data[i].Stops[j]);
-              }
-            }
-            if (vm.data[i].Stops.length === 1) {
-              vm.data[i] = vm.data[i].Stops[0];
-            }
-          }
-        }
+          vm.success = true;
+          vm.data = data;
+          $interval(()=>vm.loadLimit++, 2000);
+          for (let i = 0; i < vm.data.length; i++) setValues(vm.data[i]);
         }
       }).catch(()=>{
         vm.status = "Kunne ikke laste inn data.";
