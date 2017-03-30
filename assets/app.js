@@ -44,6 +44,7 @@ app.controller('masterCtrl', ['$http', '$chttp', '$timeout', '$interval', '$q', 
         if (!vm.userTapped) {
         vm.success = true;
         vm.data = data;
+        $interval(()=>vm.loadLimit++, 2000);
         for (let i = 0; i < vm.data.length; i++) {
           setValues(vm.data[i]);
           if (vm.data[i].PlaceType == 'Area') {
@@ -97,7 +98,6 @@ app.controller('masterCtrl', ['$http', '$chttp', '$timeout', '$interval', '$q', 
     eval(data);
     vm.jqLoaded = true;
   });
-  $interval(()=>vm.loadLimit++, 5);
   vm.clearWatch = ()=>{
     vm.userTapped = true;
     navigator.geolocation.clearWatch(vm.wpid);
