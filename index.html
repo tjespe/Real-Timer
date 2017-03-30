@@ -17,7 +17,7 @@
   </header>
   <spacer></spacer>
 
-  <div class="content padded" ng-if="!m.success" ng-bind="m.status">Fikk ikke tilgang til stedstjenester</div>
+  <div class="content" ng-if="!m.success" ng-bind="m.status">Fikk ikke tilgang til stedstjenester</div>
 
   <div ng-repeat="(index, stop) in m.data track by $index" ng-if="m.success" class="content stop content-row-wrapper" ng-include="'assets/content-row.html'"></div>
 
@@ -26,13 +26,6 @@
   <link rel="stylesheet" href="assets/main.css">
   <script src="assets/app.js"></script>
   <script src="assets/widget.js"></script>
-  <script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-  ga('create', 'UA-69446843-3', 'auto');
-    ga('send', 'pageview');
-  </script>
+  <script>(function(a,e,f,g,b,c,d){a.GoogleAnalyticsObject=b;a[b]=a[b]||function(){(a[b].q=a[b].q||[]).push(arguments)};a[b].a=1*new Date;c=e.createElement(f);d=e.getElementsByTagName(f)[0];c.async=1;c.src=g;d.parentNode.insertBefore(c,d)})(window,document,"script","https://www.google-analytics.com/analytics.js","ga");ga("create","UA-69446843-3","auto");ga("send","pageview")</script>
 </body>
 </html>
