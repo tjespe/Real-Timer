@@ -19,8 +19,7 @@
 
   <div class="content" ng-if="!m.success" ng-bind="m.status" style="padding-top:20px">Fikk ikke tilgang til stedstjenester</div>
 
-  <div ng-repeat="(index, stop) in m.data track by $index" ng-if="m.success" class="content stop content-row-wrapper" ng-include="'assets/content-row.html'"></div>
-
+  <widget class="content" ng-repeat="(index, stop) in m.data track by $index" ng-if="m.success" class="content stop content-row-wrapper"></widget>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.0/angular.min.js"></script>
   <link rel="stylesheet" href="assets/main.css">

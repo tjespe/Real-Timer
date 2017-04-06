@@ -7,7 +7,9 @@ app.directive('widget', ['$http', '$chttp', function ($http, $chttp) {
       vm.content = "<c>Laster inn...</c><br><br><br>";
       vm.timestamp = "";
       vm.loading = false;
+      vm.hasLoaded = false;
       vm.update = ()=>{
+        vm.hasLoaded = true;
         vm.loading = true;
         $http.get(vm.url+"&d="+Date.now()).success((data)=>{
           vm.loading = false;
@@ -23,7 +25,11 @@ app.directive('widget', ['$http', '$chttp', function ($http, $chttp) {
         vm.content = "En feil har oppstått, prøv å laste inn på nytt. Status: "+e;
         vm.loading = false;
       };
-      vm.update();
+      $scope.$watch('m.loadLimit', ()=>{vm.loadIf()});
+      $scope.$watch('stop.hasExpanded', ()=>{vm.loadIf()});
+      vm.loadIf = ()=>{
+        if (!vm.hasLoaded && ($scope.index < $scope.m.loadLimit || $scope.stop.hasExpanded)) vm.update();
+      };
     },
     controllerAs: 'w'
   }

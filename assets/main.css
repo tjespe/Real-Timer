@@ -47,6 +47,7 @@ spacer {
   border-radius: 7.5px;
   min-height: 40px;
   min-width: 292px;
+  display:block;
 }
 .content-row {
   display: flex;
@@ -71,7 +72,7 @@ spacer {
 .show {
   display: block !important;
 }
-widget {
+.widget {
   background: #333333;
   display: block;
   color: #ccc;

@@ -1,5 +1,11 @@
-<div class="top-bar">
-  <div class="update" ng-click="w.update()" ng-class="{clickable: !w.loading}">Oppdater</div>
-  <div class="timestamp" ng-bind-html="w.timestamp"></div>
+<div class="content-row" ng-click="stop.expanded = !stop.expanded; stop.hasExpanded = true; m.clearWatch()">
+  <div ng-bind="stop.Name"></div>
+  <div class="glyphicon" ng-if="m.jqLoaded" ng-class="{'glyphicon-chevron-up':stop.expanded, 'glyphicon-chevron-down':!stop.expanded}"></div>
 </div>
-<ul ng-bind-html="w.content" class="widget-content"></ul>
+<div class="widget" ng-show="stop.expanded">
+  <div class="top-bar">
+    <div class="update" ng-click="w.update()" ng-class="{clickable: !w.loading}">Oppdater</div>
+    <div class="timestamp" ng-bind-html="w.timestamp"></div>
+  </div>
+  <ul ng-bind-html="w.content" class="widget-content"></ul>
+</div>

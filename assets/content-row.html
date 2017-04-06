@@ -1,5 +1,0 @@
-<div class="content-row" ng-click="stop.expanded = !stop.expanded; object.hasExpanded = true; m.clearWatch()">
-  <div ng-bind="stop.Name"></div>
-  <div class="glyphicon" ng-if="m.jqLoaded" ng-class="{'glyphicon-chevron-up':stop.expanded, 'glyphicon-chevron-down':!stop.expanded}"></div>
-</div>
-<widget ng-show="stop.expanded" ng-if="index <= m.loadLimit || object.hasExpanded"></widget>
