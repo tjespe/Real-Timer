@@ -39,8 +39,8 @@ app.controller('masterCtrl', ['$http', '$chttp', '$timeout', '$interval', '$q', 
     vm.conv.then(()=>{
       vm.coords = convert(position.coords.latitude, position.coords.longitude);
       vm.status = "Laster inn data…";
-      let proposals = 22;
-      $chttp.get('//script.google.com/macros/s/AKfycbzQ4aytAhVinfiYxMy2G-4whWFXv1V1YIbc1LE8KQPZcQQT6Odi/exec?url=reisapi.ruter.no%2FPlace%2FGetClosestPlacesExtension%3Fcoordinates%3Dx%3D'+Math.round(vm.coords[0])+'%2Cy%3D'+Math.round(vm.coords[1])+'%26proposals%3D'+proposals, 0, {}, vm.canceler.promise).then(function (data) {
+      let proposals = 22, url_param = 'reisapi.ruter.no%2FPlace%2FGetClosestPlacesExtension%3Fcoordinates%3Dx%3D'+Math.round(vm.coords[0])+'%2Cy%3D'+Math.round(vm.coords[1])+'%26proposals%3D'+proposals;
+      $chttp.get('//script.google.com/macros/s/AKfycbzQ4aytAhVinfiYxMy2G-4whWFXv1V1YIbc1LE8KQPZcQQT6Odi/exec?url='+url_param, 0, {}, vm.canceler.promise, ['//cdn.real-timer.tk:42955/?url='+url_param]).then(function (data) {
         if (!vm.userTapped) {
           vm.success = true;
           vm.data = data;
@@ -96,8 +96,9 @@ app.controller('masterCtrl', ['$http', '$chttp', '$timeout', '$interval', '$q', 
 app.service('$chttp', ['$http', '$q', '$timeout', function ($http, $q, $timeout) {
   let vm = this;
 
-  vm.get = (url, timeout, options)=>{
+  vm.get = (url, timeout, options, extra_timeout, alternate_urls)=>{
     let deferred = $q.defer();
+    if (typeof alternate_urls === 'undefined') alternate_urls = [];
     if (typeof options === 'undefined') options = {};
     options.timeout = deferred.promise;
     $http.get(url, options).success(function (data) {
@@ -122,6 +123,14 @@ app.service('$chttp', ['$http', '$q', '$timeout', function ($http, $q, $timeout)
       extra_promise.catch(()=>{
         deferred.reject("Canceled");
       });
+    }
+    for (let i = 0;i<alternate_urls.length;i++) {
+      $http.get(alternate_urls[i], options).success(function (data) {
+        try {
+          localStorage[url] = JSON.stringify(data);
+        } catch (e) { }
+        deferred.resolve(data);
+      })
     }
 
     return deferred.promise;
