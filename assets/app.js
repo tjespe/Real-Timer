@@ -40,7 +40,7 @@ app.controller('masterCtrl', ['$http', '$chttp', '$timeout', '$interval', '$q', 
       vm.coords = convert(position.coords.latitude, position.coords.longitude);
       vm.status = "Laster inn data…";
       let proposals = 22, url_param = 'reisapi.ruter.no%2FPlace%2FGetClosestPlacesExtension%3Fcoordinates%3Dx%3D'+Math.round(vm.coords[0])+'%2Cy%3D'+Math.round(vm.coords[1])+'%26proposals%3D'+proposals;
-      $chttp.get('//script.google.com/macros/s/AKfycbzQ4aytAhVinfiYxMy2G-4whWFXv1V1YIbc1LE8KQPZcQQT6Odi/exec?url='+url_param, 0, {}, vm.canceler.promise, ['//cdn.real-timer.tk:42955/?url='+url_param]).then(function (data) {
+      $chttp.get('//script.google.com/macros/s/AKfycbzQ4aytAhVinfiYxMy2G-4whWFXv1V1YIbc1LE8KQPZcQQT6Odi/exec?url='+url_param, 0, {}, vm.canceler.promise, ['//cdn.real-timer.tk:2086/?url='+url_param]).then(function (data) {
         if (!vm.userTapped) {
           vm.success = true;
           vm.data = data;
