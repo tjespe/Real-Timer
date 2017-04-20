@@ -1,5 +1,3 @@
-try {document.body.style = {};} catch (e) {}
-
 let app = angular.module('app', []);
 
 app.config(["$sceProvider", '$controllerProvider', '$provide', '$sceDelegateProvider', '$compileProvider', function($sceProvider, $controllerProvider, $provide, $sceDelegateProvider, $compileProvider) {
