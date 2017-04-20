@@ -41,12 +41,11 @@ app.controller('masterCtrl', ['$http', '$chttp', '$timeout', '$interval', '$q', 
       vm.status = "Laster inn data…";
       let proposals = 22, url_param = 'reisapi.ruter.no%2FPlace%2FGetClosestPlacesExtension%3Fcoordinates%3Dx%3D'+Math.round(vm.coords[0])+'%2Cy%3D'+Math.round(vm.coords[1])+'%26proposals%3D'+proposals;
       $chttp.get('//script.google.com/macros/s/AKfycbzQ4aytAhVinfiYxMy2G-4whWFXv1V1YIbc1LE8KQPZcQQT6Odi/exec?url='+url_param, 0, {}, vm.canceler.promise, ['//real-timer-server.tk:2087/?url='+url_param]).then(function (data) {
-        for (let i = 0; i < data.length; i++) setValues(data[i]);
-        if (!vm.userTapped && data != vm.data) {
-          vm.success = false;
+        if (!vm.userTapped) {
+          vm.success = true;
           vm.data = data;
           $interval(()=>vm.loadLimit++, 2000);
-          $timeout(()=>vm.success = true, 10);
+          for (let i = 0; i < vm.data.length; i++) setValues(vm.data[i]);
         }
       }).catch(()=>{
         vm.status = "Kunne ikke laste inn data.";
