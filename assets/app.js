@@ -24,6 +24,7 @@ app.controller('masterCtrl', ['$http', '$chttp', '$timeout', '$interval', '$q', 
   vm.success = false;
   vm.userTapped = false;
   vm.data = [];
+  vm.realTimeData = {};
   vm.coords = [0,0];
 	vm.retryInterval;
   vm.conv = $chttp.get('assets/converter.min.js', 0).then((data)=>{
@@ -40,14 +41,13 @@ app.controller('masterCtrl', ['$http', '$chttp', '$timeout', '$interval', '$q', 
       vm.coords = convert(position.coords.latitude, position.coords.longitude);
       vm.status = "Laster inn data…";
       let proposals = 22, url_param = 'reisapi.ruter.no%2FPlace%2FGetClosestPlacesExtension%3Fcoordinates%3Dx%3D'+Math.round(vm.coords[0])+'%2Cy%3D'+Math.round(vm.coords[1])+'%26proposals%3D'+proposals;
-      $chttp.get('//script.google.com/macros/s/AKfycbzQ4aytAhVinfiYxMy2G-4whWFXv1V1YIbc1LE8KQPZcQQT6Odi/exec?url='+url_param, 0, {}, vm.canceler.promise, ['//real-timer-server.tk:2087/?url='+url_param]).then(function (data) {
+      $chttp.get('//script.google.com/macros/s/AKfycbzQ4aytAhVinfiYxMy2G-4whWFXv1V1YIbc1LE8KQPZcQQT6Odi/exec?url='+url_param, 0, {}, vm.canceler.promise, ['https://real-timer-server.tk:2087/?url='+url_param]).then(function (data) {
         for (let i = 0; i < data.length; i++) setValues(data[i]);
-        console.log(data, vm.data);
         if (!vm.userTapped && vm.data != data) {
           vm.success = false;
           vm.data = data;
-          $interval(()=>vm.loadLimit++, 2000);
           $timeout(()=>vm.success = true, 0);
+          $interval(()=>vm.loadLimit++, 2000);
         }
       }).catch(()=>{
         vm.status = "Kunne ikke laste inn data.";

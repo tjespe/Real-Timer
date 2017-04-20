@@ -21,7 +21,6 @@ app.directive('widget', ['$http', '$chttp', function ($http, $chttp) {
         }).error(vm.throwError);
       };
       vm.throwError = (data, e)=>{
-        console.log(data, e);
         vm.content = "En feil har oppstått, prøv å laste inn på nytt. Status: "+e;
         vm.loading = false;
       };
@@ -30,6 +29,10 @@ app.directive('widget', ['$http', '$chttp', function ($http, $chttp) {
       vm.loadIf = ()=>{
         if (!vm.hasLoaded && ($scope.index < $scope.m.loadLimit || $scope.stop.hasExpanded)) vm.update();
       };
+      vm.setContent = (data)=>{
+        vm.content = data;
+        $scope.m.realTimeData[$scope.stop.ID] = data;
+      }
     },
     controllerAs: 'w'
   }
