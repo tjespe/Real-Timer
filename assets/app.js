@@ -36,7 +36,6 @@ app.controller('masterCtrl', ['$http', '$chttp', '$timeout', '$interval', '$q', 
   vm.loadLimit = 5;
 
   let geo_success = (position)=>{
-    console.log(position);
     vm.conv.then(()=>{
       vm.coords = convert(position.coords.latitude, position.coords.longitude);
       vm.status = "Laster inn data…";
