@@ -28,7 +28,7 @@ app.directive('widget', ['$http', '$chttp', '$q', function ($http, $chttp, $q) {
       $scope.$watch('m.loadLimit', ()=>{vm.loadIf()});
       $scope.$watch('stop.hasExpanded', ()=>{vm.loadIf()});
       vm.loadIf = ()=>{
-        if (!vm.hasLoaded && ($scope.index < $scope.m.loadLimit || $scope.stop.hasExpanded)) vm.update();
+        if (!vm.hasLoaded && ($scope.index < $scope.m.loadLimit || $scope.stop.hasExpanded) && !($scope.stop.ID in $scope.m.realTimeData)) vm.update();
       };
       vm.setContent = (data)=>{
         vm.content = data;
