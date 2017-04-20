@@ -34,7 +34,7 @@ app.directive('widget', ['$http', '$chttp', '$q', function ($http, $chttp, $q) {
         vm.content = data;
         $scope.m.realTimeData[$scope.stop.ID] = data;
       };
-      $scope.$on("$destroy", vm.canceler.resolve);
+      $scope.$on("$destroy", ()=>{vm.canceler.resolve()});
     },
     controllerAs: 'w'
   }
