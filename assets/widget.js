@@ -1,4 +1,4 @@
-app.directive('widget', ['$http', '$chttp', function ($http, $chttp) {
+app.directive('widget', ['$http', '$chttp', '$q', function ($http, $chttp, $q) {
   return {
     templateUrl: '/assets/widget.html',
     controller: function ($scope, $element, $attrs) {
@@ -9,9 +9,10 @@ app.directive('widget', ['$http', '$chttp', function ($http, $chttp) {
       vm.loading = false;
       vm.hasLoaded = false;
       vm.update = ()=>{
+        vm.canceler = $q.defer();
         vm.hasLoaded = true;
         vm.loading = true;
-        $http.get(vm.url+"&d="+Date.now()).success((data)=>{
+        $http.get(vm.url+"&d="+Date.now(), {timeout: vm.canceler.promise}).success((data)=>{
           vm.loading = false;
           vm.content = $(data).find("ul").html() || $(data).find(".travelresultsNone").html();
           vm.content = vm.content.replace(/href=\"\/no\/Avvik\/Avganger\/(\d+)\"/g, (str, id)=>{
@@ -32,7 +33,8 @@ app.directive('widget', ['$http', '$chttp', function ($http, $chttp) {
       vm.setContent = (data)=>{
         vm.content = data;
         $scope.m.realTimeData[$scope.stop.ID] = data;
-      }
+      };
+      $scope.$on("$destroy", vm.canceler.resolve);
     },
     controllerAs: 'w'
   }
