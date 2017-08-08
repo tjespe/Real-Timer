@@ -64,7 +64,7 @@ app.controller('masterCtrl', ['$http', '$chttp', '$timeout', '$interval', '$q', 
   let get_position = ()=>{
     if ('geolocation' in navigator) {
       if ('onLine' in navigator && !navigator.onLine) {
-        vm.status = "Du er ikke koblet til internett. Vennligst koble til internett for å laste inn sanntidsinformasjon.";
+        vm.status = "Du er ikke koblet til internett";
         vm.retryInterval = $interval(get_position, 1500);
       } else {
         vm.wpid = navigator.geolocation.watchPosition(geo_success, geo_error, geo_options);
