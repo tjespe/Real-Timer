@@ -16,7 +16,7 @@ app.config(["$sceProvider", '$controllerProvider', '$provide', '$sceDelegateProv
   };
 }]);
 
-app.controller('masterCtrl', ['$http', '$chttp', '$timeout', '$interval', '$q', function ($http, $chttp, $timeout, $interval, $q) {
+app.controller('masterCtrl', ['$http', '$chttp', '$timeout', '$interval', '$q', '$window', function ($http, $chttp, $timeout, $interval, $q, $window) {
   let vm = this;
   vm.css = "";
   vm.jqLoaded = false;
@@ -34,6 +34,12 @@ app.controller('masterCtrl', ['$http', '$chttp', '$timeout', '$interval', '$q', 
   });
   vm.canceler = $q.defer();
   vm.loadLimit = 5;
+
+
+  // Block updating view after user scrolls
+  angular.element($window).bind("scroll", function () { 
+    vm.userTapped = true;
+  });
 
   let geo_success = (position)=>{
     vm.conv.then(()=>{
