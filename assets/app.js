@@ -35,12 +35,6 @@ app.controller('masterCtrl', ['$http', '$chttp', '$timeout', '$interval', '$q', 
   vm.canceler = $q.defer();
   vm.loadLimit = 5;
 
-
-  // Block updating view after user scrolls
-  angular.element($window).bind("scroll", function () { 
-    vm.userTapped = true;
-  });
-
   let geo_success = (position)=>{
     vm.conv.then(()=>{
       vm.coords = convert(position.coords.latitude, position.coords.longitude);
@@ -54,6 +48,13 @@ app.controller('masterCtrl', ['$http', '$chttp', '$timeout', '$interval', '$q', 
           $timeout(()=>vm.success = true, 0);
           $interval(()=>vm.loadLimit++, 2000);
         }
+
+        // Block updating view after user scrolls
+        angular.element($window).bind("scroll", function () { 
+          vm.userTapped = true;
+          console.log("User scrolled")
+        });
+
       }).catch(()=>{
         vm.status = "Kunne ikke laste inn data.";
       });
