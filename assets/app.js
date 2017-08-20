@@ -44,9 +44,13 @@ app.controller('masterCtrl', ['$http', '$chttp', '$timeout', '$interval', '$q', 
         for (let i = 0; i < data.length; i++) setValues(data[i]);
         if (!vm.userTapped && vm.data != data) {
           vm.success = false;
-          vm.data = data;
-          $timeout(()=>vm.success = true, 0);
-          $interval(()=>vm.loadLimit++, 2000);
+          if (data.length > 0) {
+            vm.data = data;
+            $timeout(()=>vm.success = true, 0);
+            $interval(()=>vm.loadLimit++, 2000);
+          } else {
+            vm.status = "Det er ingen holdeplasser i nærheten";
+          }
         }
 
         // Block updating view after user scrolls
