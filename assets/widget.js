@@ -1,6 +1,6 @@
 app.directive('widget', ['$http', '$chttp', '$q', function ($http, $chttp, $q) {
   return {
-    templateUrl: '/assets/widget.html',
+    templateUrl: 'assets/widget.html',
     controller: function ($scope, $element, $attrs) {
       let vm = this;
       vm.url = "https://reiseplanlegger-ekstern.ruter.no/no/Sanntid/For/("+$scope.stop.ID+")"+$scope.stop.Name+"%20("+$scope.stop.District+")?x-requested-with=XMLHttpRequest";
