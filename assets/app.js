@@ -16,52 +16,56 @@ app.config(["$sceProvider", '$controllerProvider', '$provide', '$sceDelegateProv
   };
 }]);
 
-app.controller('masterCtrl', ['$http', '$chttp', '$timeout', '$interval', '$q', '$window', function ($http, $chttp, $timeout, $interval, $q, $window) {
+app.controller('masterCtrl', ['$http', '$chttp', '$timeout', '$interval', '$q', '$window', '$scope', function ($http, $chttp, $timeout, $interval, $q, $window, $scope) {
   let vm = this;
+  vm.q = "";
   vm.css = "";
   vm.jqLoaded = false;
-  vm.status = "Lokaliserer…";
-  vm.success = false;
-  vm.userTapped = false;
-  vm.data = [];
-  vm.realTimeData = {};
   vm.coords = [0,0];
-	vm.retryInterval;
   vm.conv = $chttp.get('assets/converter.min.js', 0).then((data)=>{
     eval(data);
   }).catch((data, status)=>{
     vm.status = "Vennligst oppdater siden";
   });
-  vm.canceler = $q.defer();
-  vm.loadLimit = 5;
+
+  let get_data = (url_param)=>{
+    vm.status = "Laster inn data…";
+    vm.userTapped = false;
+    vm.success = false;
+    vm.canceler = $q.defer();
+    vm.loadLimit = 5;
+    vm.data = [];
+    vm.realTimeData = {};
+
+    $chttp.get('//script.google.com/macros/s/AKfycbzQ4aytAhVinfiYxMy2G-4whWFXv1V1YIbc1LE8KQPZcQQT6Odi/exec?url='+url_param, 0, {}, vm.canceler.promise, ['https://real-timer-server.tk:2087/?url='+url_param]).then(function (data) {
+      for (let i = 0; i < data.length; i++) setValues(data[i]);
+      if (!vm.userTapped && vm.data != data) {
+        vm.success = false;
+        vm.userTapped = url_param.includes("webapi");
+        if (data.length > 0) {
+          vm.data = data;
+          $timeout(()=>vm.success = true, 0);
+          $interval(()=>vm.loadLimit++, 2000);
+        } else {
+          vm.status = "Fant ingen holdeplasser.";
+        }
+      }
+
+      // Block updating view after user scrolls
+      angular.element($window).bind("scroll", function () {
+        vm.userTapped = true;
+      });
+
+    }).catch(()=>{
+      vm.status = "Kunne ikke laste inn data.";
+    });
+  };
 
   let geo_success = (position)=>{
     vm.conv.then(()=>{
       vm.coords = convert(position.coords.latitude, position.coords.longitude);
-      vm.status = "Laster inn data…";
-      let proposals = 22, url_param = 'reisapi.ruter.no%2FPlace%2FGetClosestPlacesExtension%3Fcoordinates%3Dx%3D'+Math.round(vm.coords[0])+'%2Cy%3D'+Math.round(vm.coords[1])+'%26proposals%3D'+proposals;
-      $chttp.get('//script.google.com/macros/s/AKfycbzQ4aytAhVinfiYxMy2G-4whWFXv1V1YIbc1LE8KQPZcQQT6Odi/exec?url='+url_param, 0, {}, vm.canceler.promise, ['https://real-timer-server.tk:2087/?url='+url_param]).then(function (data) {
-        for (let i = 0; i < data.length; i++) setValues(data[i]);
-        if (!vm.userTapped && vm.data != data) {
-          vm.success = false;
-          if (data.length > 0) {
-            vm.data = data;
-            $timeout(()=>vm.success = true, 0);
-            $interval(()=>vm.loadLimit++, 2000);
-          } else {
-            vm.status = "Det er ingen holdeplasser i nærheten";
-          }
-        }
-
-        // Block updating view after user scrolls
-        angular.element($window).bind("scroll", function () { 
-          vm.userTapped = true;
-          console.log("User scrolled")
-        });
-
-      }).catch(()=>{
-        vm.status = "Kunne ikke laste inn data.";
-      });
+      let url_param = 'reisapi.ruter.no%2FPlace%2FGetClosestPlacesExtension%3Fcoordinates%3Dx%3D'+Math.round(vm.coords[0])+'%2Cy%3D'+Math.round(vm.coords[1])+'%26proposals%3D'+String(22);
+      get_data(url_param);
     });
   }
   let geo_error = ()=>{
@@ -72,7 +76,9 @@ app.controller('masterCtrl', ['$http', '$chttp', '$timeout', '$interval', '$q', 
     maximumAge        : 0,
     timeout           : 5000
   }
-  let get_position = ()=>{
+  vm.get_position = ()=>{
+    vm.status = "Lokaliserer…";
+    vm.success = false;
     if ('geolocation' in navigator) {
       if ('onLine' in navigator && !navigator.onLine) {
         vm.status = "Du er ikke koblet til internett";
@@ -85,7 +91,12 @@ app.controller('masterCtrl', ['$http', '$chttp', '$timeout', '$interval', '$q', 
       geo_error();
     }
   }
-  get_position();
+  vm.search = ()=>{
+    vm.status = "Søker…";
+    get_data("ruter.no%2Fwebapi%2Fgetplaces%3Fsearch%3D"+encodeURIComponent(vm.q));
+  };
+  $scope.$watch('m.q', vm.search, true);
+  vm.get_position();
   $chttp.get('assets/glyphicons.min.css', 0).then((data)=>vm.css += data);
   $chttp.get('assets/ubuntu.css', 0).then((data)=>vm.css += data);
   vm.jq = $chttp.get('https://code.jquery.com/jquery-3.1.1.min.js', 0);
