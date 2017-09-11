@@ -28,7 +28,7 @@ header>input {
   width: 23px;
   height: 23px;
   right: 5%;
-  background: url(/assets/search.svg) 98.5% / 22px no-repeat;
+  background: url(assets/search.svg) 98.5% / 22px no-repeat;
   background-color: white;
   color: transparent;
   transition: width 0.3s ease-in-out;
