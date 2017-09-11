@@ -21,6 +21,7 @@ app.controller('masterCtrl', ['$http', '$chttp', '$timeout', '$interval', '$q', 
   vm.q = "";
   vm.css = "";
   vm.jqLoaded = false;
+  vm.raw_coords = [0,0];
   vm.coords = [0,0];
   vm.conv = $chttp.get('assets/converter.min.js', 0).then((data)=>{
     eval(data);
@@ -63,13 +64,15 @@ app.controller('masterCtrl', ['$http', '$chttp', '$timeout', '$interval', '$q', 
 
   let geo_success = (position)=>{
     vm.conv.then(()=>{
-      vm.coords = convert(position.coords.latitude, position.coords.longitude);
+      vm.raw_coords = [position.coords.latitude, position.coords.longitude];
+      vm.coords = convert(vm.raw_coords[0], vm.raw_coords[1]);
       let url_param = 'reisapi.ruter.no%2FPlace%2FGetClosestPlacesExtension%3Fcoordinates%3Dx%3D'+Math.round(vm.coords[0])+'%2Cy%3D'+Math.round(vm.coords[1])+'%26proposals%3D'+String(22);
       get_data(url_param);
     });
   }
-  let geo_error = ()=>{
+  let geo_error = (e)=>{
     vm.status = "Fikk ikke tilgang til stedstjenester";
+    console.log(e);
   }
   let geo_options = {
     enableHighAccuracy: true,
@@ -77,8 +80,12 @@ app.controller('masterCtrl', ['$http', '$chttp', '$timeout', '$interval', '$q', 
     timeout           : 5000
   }
   vm.get_position = ()=>{
+    vm.userTapped = false;
     vm.status = "Lokaliserer…";
     vm.success = false;
+    // Use saved location if already located
+    if (vm.raw_coords[0] !== 0) geo_success({coords: {latitude: vm.raw_coords[0], longitude: vm.raw_coords[1]}});
+    // Try to get location
     if ('geolocation' in navigator) {
       if ('onLine' in navigator && !navigator.onLine) {
         vm.status = "Du er ikke koblet til internett";
@@ -92,8 +99,12 @@ app.controller('masterCtrl', ['$http', '$chttp', '$timeout', '$interval', '$q', 
     }
   }
   vm.search = ()=>{
-    vm.status = "Søker…";
-    get_data("ruter.no%2Fwebapi%2Fgetplaces%3Fsearch%3D"+encodeURIComponent(vm.q));
+    if (vm.q.length) {
+      vm.status = "Søker…";
+      get_data("ruter.no%2Fwebapi%2Fgetplaces%3Fsearch%3D"+encodeURIComponent(vm.q));
+    } else {
+      vm.get_position();
+    }
   };
   $scope.$watch('m.q', vm.search, true);
   vm.get_position();
