@@ -71,7 +71,7 @@ app.controller('masterCtrl', ['$http', '$chttp', '$timeout', '$interval', '$q', 
     });
   }
   let geo_error = (e)=>{
-    vm.status = "Fikk ikke tilgang til stedstjenester";
+    $scope.$apply(()=>vm.status = "Fikk ikke tilgang til stedstjenester");
     console.log(e);
   }
   let geo_options = {
