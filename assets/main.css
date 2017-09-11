@@ -18,6 +18,31 @@ header {
   text-align: center;
   z-index: 1000;
 }
+header>input {
+  position: absolute;
+  top: 7px;
+  font-size: 1.2em;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  box-shadow: 0 0 25px rgba(0,0,0,0.03);
+  width: 23px;
+  right: 5%;
+  background: url(/assets/search.svg) 98.5% / 22px no-repeat;
+  background-color: white;
+  color: transparent;
+  transition: width 0.3s ease-in-out;
+}
+header>input:focus {
+  width: 90%;
+  max-width: 500px;
+  color: initial;
+  outline: none;
+}
+@media screen and (min-width: 555px) {
+  header>input {
+    right: calc(50% - 250px);
+  }
+}
 h2 {
   margin-top: 6px;
   font-weight: 100;
