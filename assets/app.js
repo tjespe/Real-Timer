@@ -29,14 +29,16 @@ app.controller('masterCtrl', ['$http', '$httpx', '$timeout', '$interval', '$q', 
     vm.status = "Vennligst oppdater siden";
   });
 
-  let get_data = (url_param)=>{
+  let reset_data = ()=>{
     vm.status = "Laster inn data…";
     vm.success = false;
     vm.canceler = $q.defer();
     vm.loadLimit = 5;
     vm.data = [];
     vm.realTimeData = {};
+  }
 
+  let get_data = (url_param)=>{
     $httpx.get('//script.google.com/macros/s/AKfycbzQ4aytAhVinfiYxMy2G-4whWFXv1V1YIbc1LE8KQPZcQQT6Odi/exec?url='+url_param, {lifetime:Infinity, timeout:vm.canceler.promise, alt_urls:['https://real-timer-server.tk:2087/?url='+url_param]}).then(function (data) {
       for (let i = 0; i < data.length; i++) setValues(data[i]);
       if (!vm.userTapped && vm.data != data) {
@@ -62,12 +64,15 @@ app.controller('masterCtrl', ['$http', '$httpx', '$timeout', '$interval', '$q', 
   };
 
   let geo_success = (position)=>{
-    vm.conv.then(()=>{
-      vm.raw_coords = [position.coords.latitude, position.coords.longitude];
-      vm.coords = convert(vm.raw_coords[0], vm.raw_coords[1]);
-      let url_param = 'reisapi.ruter.no%2FPlace%2FGetClosestPlacesExtension%3Fcoordinates%3Dx%3D'+Math.round(vm.coords[0])+'%2Cy%3D'+Math.round(vm.coords[1])+'%26proposals%3D'+String(22);
-      get_data(url_param);
-    });
+    if (!vm.success) reset_data(); // Do not reset data if data is already displayed
+    if (!vm.q.length) { // Get stops nearby if not in search mode
+      vm.conv.then(()=>{
+        vm.raw_coords = [position.coords.latitude, position.coords.longitude];
+        vm.coords = convert(vm.raw_coords[0], vm.raw_coords[1]);
+        let url_param = 'reisapi.ruter.no%2FPlace%2FGetClosestPlacesExtension%3Fcoordinates%3Dx%3D'+Math.round(vm.coords[0])+'%2Cy%3D'+Math.round(vm.coords[1])+'%26proposals%3D'+String(22);
+        get_data(url_param);
+      });
+    }
   }
   let geo_error = (e)=>{
     $scope.$apply(()=>vm.status = "Fikk ikke tilgang til stedstjenester");
@@ -101,6 +106,7 @@ app.controller('masterCtrl', ['$http', '$httpx', '$timeout', '$interval', '$q', 
     if (vm.q.length) {
       vm.status = "Søker…";
       vm.clearWatch();
+      reset_data();
       vm.userTapped = false;
       get_data("ruter.no%2Fwebapi%2Fgetplaces%3Fsearch%3D"+encodeURIComponent(vm.q));
     } else {
