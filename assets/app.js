@@ -16,14 +16,14 @@ app.config(["$sceProvider", '$controllerProvider', '$provide', '$sceDelegateProv
   };
 }]);
 
-app.controller('masterCtrl', ['$http', '$chttp', '$timeout', '$interval', '$q', '$window', '$scope', function ($http, $chttp, $timeout, $interval, $q, $window, $scope) {
+app.controller('masterCtrl', ['$http', '$httpx', '$timeout', '$interval', '$q', '$window', '$scope', function ($http, $httpx, $timeout, $interval, $q, $window, $scope) {
   let vm = this;
   vm.q = "";
   vm.css = "";
   vm.jqLoaded = false;
   vm.raw_coords = [0,0];
   vm.coords = [0,0];
-  vm.conv = $chttp.get('assets/converter.min.js', 0).then((data)=>{
+  vm.conv = $httpx.get('assets/converter.min.js', {lifetime: Infinity}).then((data)=>{
     eval(data);
   }).catch((data, status)=>{
     vm.status = "Vennligst oppdater siden";
@@ -37,7 +37,7 @@ app.controller('masterCtrl', ['$http', '$chttp', '$timeout', '$interval', '$q', 
     vm.data = [];
     vm.realTimeData = {};
 
-    $chttp.get('//script.google.com/macros/s/AKfycbzQ4aytAhVinfiYxMy2G-4whWFXv1V1YIbc1LE8KQPZcQQT6Odi/exec?url='+url_param, 0, {}, vm.canceler.promise, ['https://real-timer-server.tk:2087/?url='+url_param]).then(function (data) {
+    $httpx.get('//script.google.com/macros/s/AKfycbzQ4aytAhVinfiYxMy2G-4whWFXv1V1YIbc1LE8KQPZcQQT6Odi/exec?url='+url_param, {lifetime:Infinity, timeout:vm.canceler.promise, alt_urls:['https://real-timer-server.tk:2087/?url='+url_param]}).then(function (data) {
       for (let i = 0; i < data.length; i++) setValues(data[i]);
       if (!vm.userTapped && vm.data != data) {
         vm.success = false;
@@ -109,9 +109,9 @@ app.controller('masterCtrl', ['$http', '$chttp', '$timeout', '$interval', '$q', 
   };
   $scope.$watch('m.q', vm.search, true);
   vm.get_position();
-  $chttp.get('assets/glyphicons.min.css', 0).then((data)=>vm.css += data);
-  $chttp.get('assets/ubuntu.css', 0).then((data)=>vm.css += data);
-  vm.jq = $chttp.get('https://code.jquery.com/jquery-3.1.1.min.js', 0);
+  $httpx.get('assets/glyphicons.min.css', {lifetime: Infinity}).then((data)=>vm.css += data);
+  $httpx.get('assets/ubuntu.css', {lifetime: Infinity}).then((data)=>vm.css += data);
+  vm.jq = $httpx.get('https://code.jquery.com/jquery-3.1.1.min.js', {lifetime: Infinity});
   vm.jq.then((data)=>{
     eval(data);
     vm.jqLoaded = true;
@@ -125,49 +125,5 @@ app.controller('masterCtrl', ['$http', '$chttp', '$timeout', '$interval', '$q', 
     obj.expanded = false;
     obj.hasExpanded = false;
     obj.height = "25px";
-  }
-}]);
-
-app.service('$chttp', ['$http', '$q', '$timeout', function ($http, $q, $timeout) {
-  let vm = this;
-
-  vm.get = (url, timeout, options, extra_timeout, alternate_urls)=>{
-    let deferred = $q.defer();
-    if (typeof alternate_urls === 'undefined') alternate_urls = [];
-    if (typeof options === 'undefined') options = {};
-    options.timeout = deferred.promise;
-    $http.get(url, options).success(function (data) {
-      try {
-        localStorage[url] = JSON.stringify(data);
-      } catch (e) { }
-      deferred.resolve(data);
-    }).error(function (data, status) {
-      if (typeof Storage !== "undefined" && url in localStorage) {
-        deferred.resolve(JSON.parse(localStorage[url]));
-      }
-      deferred.reject("ERROR");
-    });
-    if (typeof timeout !== "undefined") {
-      $timeout(function () {
-        try {
-          deferred.resolve(JSON.parse(localStorage[url]));
-        } catch (e) {console.warn(e);}
-      }, timeout);
-    }
-    if (typeof extra_promise !== "undefined") {
-      extra_promise.catch(()=>{
-        deferred.reject("Canceled");
-      });
-    }
-    for (let i = 0;i<alternate_urls.length;i++) {
-      $http.get(alternate_urls[i], options).success(function (data) {
-        try {
-          localStorage[url] = JSON.stringify(data);
-        } catch (e) { }
-        deferred.resolve(data);
-      })
-    }
-
-    return deferred.promise;
   }
 }]);

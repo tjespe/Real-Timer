@@ -1,4 +1,4 @@
-app.directive('widget', ['$http', '$chttp', '$q', function ($http, $chttp, $q) {
+app.directive('widget', ['$http', '$httpx', '$q', function ($http, $httpx, $q) {
   return {
     templateUrl: 'assets/widget.html',
     controller: function ($scope, $element, $attrs) {
