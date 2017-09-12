@@ -31,7 +31,6 @@ app.controller('masterCtrl', ['$http', '$chttp', '$timeout', '$interval', '$q', 
 
   let get_data = (url_param)=>{
     vm.status = "Laster inn data…";
-    vm.userTapped = false;
     vm.success = false;
     vm.canceler = $q.defer();
     vm.loadLimit = 5;
@@ -101,6 +100,8 @@ app.controller('masterCtrl', ['$http', '$chttp', '$timeout', '$interval', '$q', 
   vm.search = ()=>{
     if (vm.q.length) {
       vm.status = "Søker…";
+      vm.clearWatch();
+      vm.userTapped = false;
       get_data("ruter.no%2Fwebapi%2Fgetplaces%3Fsearch%3D"+encodeURIComponent(vm.q));
     } else {
       vm.get_position();
