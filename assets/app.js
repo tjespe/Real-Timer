@@ -43,13 +43,12 @@ app.controller('masterCtrl', ['$http', '$httpx', '$timeout', '$interval', '$q', 
   let get_data = (url_param)=>{
     $httpx.get('//script.google.com/macros/s/AKfycbzQ4aytAhVinfiYxMy2G-4whWFXv1V1YIbc1LE8KQPZcQQT6Odi/exec?url='+url_param, {lifetime:Infinity, timeout:vm.canceler.promise, alt_urls:['https://real-timer-server.tk:2087/?url='+url_param]}).then(function (data) {
       for (let i = 0; i < data.length; i++) setValues(data[i]);
-      if (url_param.includes("webapi")) vm.userTapped = false;
-      if (!vm.userTapped && vm.data != data) {
-        vm.success = false;
-        vm.userTapped = url_param.includes("webapi");
+      if (!vm.lockView && vm.data != data) {
+        vm.success = false; // Set success to false because this forces the whole view to update, without this, weird glitches occured
+        if (vm.q.length) vm.lockView = true; // Set vm.lockView to true if in search mode, because no updating of view is needed
         if (data.length > 0) {
           vm.data = data;
-          $timeout(()=>vm.success = true, 0);
+          $timeout(()=>vm.success = true, 0); // Set success back to true to show the view again, with a 0 timeout because it lowers the glitch rate and allows the client to load the view when it has CPU power ready (I think)
           $interval(()=>vm.loadLimit++, 2000);
         } else {
           vm.status = "Fant ingen holdeplasser.";
@@ -85,7 +84,7 @@ app.controller('masterCtrl', ['$http', '$httpx', '$timeout', '$interval', '$q', 
     timeout           : 5000
   }
   vm.get_position = ()=>{
-    vm.userTapped = false;
+    vm.lockView = false;
     vm.status = "Lokaliserer…";
     vm.success = false;
     // Use saved location if already located
@@ -108,6 +107,7 @@ app.controller('masterCtrl', ['$http', '$httpx', '$timeout', '$interval', '$q', 
       vm.status = "Søker…";
       vm.clearWatch();
       reset_data();
+      vm.lockView = false;
       get_data("ruter.no%2Fwebapi%2Fgetplaces%3Fsearch%3D"+encodeURIComponent(vm.q));
     } else {
       vm.get_position();
@@ -123,7 +123,7 @@ app.controller('masterCtrl', ['$http', '$httpx', '$timeout', '$interval', '$q', 
     vm.jqLoaded = true;
   });
   vm.clearWatch = ()=>{
-    vm.userTapped = true;
+    vm.lockView = true;
     navigator.geolocation.clearWatch(vm.wpid);
     vm.canceler.resolve();
   };
