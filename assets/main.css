@@ -20,7 +20,8 @@ header {
 }
 header>input {
   position: absolute;
-  top: 7px;
+  top: 6px;
+  padding: 3px;
   font-size: initial;
   border-radius: 5px;
   border: 1px solid rgba(51, 51, 51, 0.67);
@@ -28,17 +29,17 @@ header>input {
   width: 23px;
   height: 23px;
   right: 5%;
-  background: url(search.svg) 98.5% / 22px no-repeat;
+  background: url(search.svg) calc(100% - 3px) / 22px no-repeat;
   background-color: white;
   color: transparent;
   transition: width 0.3s ease-in-out;
   cursor: pointer;
 }
 header>input:focus {
-  width: 90%;
+  width: calc(90% - 6px);
   cursor: text;
   border-color: #333;
-  max-width: 500px;
+  max-width: 494px;
   color: initial;
   outline: none;
 }
