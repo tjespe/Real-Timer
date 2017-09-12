@@ -56,15 +56,13 @@ app.controller('masterCtrl', ['$http', '$httpx', '$timeout', '$interval', '$q', 
         }
       }
 
-      // Block updating view after user scrolls
-      angular.element($window).bind("scroll", function () {
-        vm.userTapped = true;
-      });
-
     }).catch(()=>{
       vm.status = "Kunne ikke laste inn data.";
     });
   };
+
+  // Block updating view after user scrolls
+  $timeout(()=>angular.element($window).on("scroll", vm.clearWatch), 1200);
 
   let geo_success = (position)=>{
     if (!vm.success) reset_data(); // Do not reset data if data is already displayed
