@@ -41,7 +41,7 @@ app.controller('masterCtrl', ['$http', '$httpx', '$timeout', '$interval', '$q', 
   }
 
   let get_data = (url_param)=>{
-    $httpx.get('//script.google.com/macros/s/AKfycbzQ4aytAhVinfiYxMy2G-4whWFXv1V1YIbc1LE8KQPZcQQT6Odi/exec?url='+url_param, {lifetime:Infinity, timeout:vm.canceler.promise, alt_urls:['https://real-timer-server.tk:2087/?url='+url_param]}).then(function (data) {
+    $httpx.get('//script.google.com/macros/s/AKfycbzQ4aytAhVinfiYxMy2G-4whWFXv1V1YIbc1LE8KQPZcQQT6Odi/exec?url='+url_param, {lifetime:Infinity, timeout:vm.canceler.promise, alt_urls:['https://cdn1.real-timer.cf:2087/?url='+url_param, 'https://cdn2.real-timer.cf/?url='+url_param]}).then(function (data) {
       for (let i = 0; i < data.length; i++) setValues(data[i]);
       if (!vm.lockView && vm.data != data) {
         vm.success = false; // Set success to false because this forces the whole view to update, without this, weird glitches occured
