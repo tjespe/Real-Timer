@@ -35,7 +35,7 @@ header>input {
   transition: width 0.3s ease-in-out;
   cursor: pointer;
 }
-header>input:focus {
+header>input:focus, header>input:valid {
   width: calc(90% - 6px);
   cursor: text;
   border-color: #333;
