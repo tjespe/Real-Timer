@@ -30,7 +30,7 @@ app.controller('masterCtrl', ['$http', '$httpx', '$timeout', '$interval', '$q', 
   });
 
   let reset_data = ()=>{
-    if (!vm.q.length) {
+    if (typeof vm.q === "undefined" || !vm.q.length) {
       vm.status = "Laster inn data…";
       vm.success = false;
     }
@@ -45,7 +45,7 @@ app.controller('masterCtrl', ['$http', '$httpx', '$timeout', '$interval', '$q', 
       for (let i = 0; i < data.length; i++) setValues(data[i]);
       if (!vm.lockView && vm.data != data) {
         vm.success = false; // Set success to false because this forces the whole view to update, without this, weird glitches occured
-        if (vm.q.length) vm.lockView = true; // Set vm.lockView to true if in search mode, because no updating of view is needed
+        if (vm.q && vm.q.length) vm.lockView = true; // Set vm.lockView to true if in search mode, because no updating of view is needed
         if (data.length > 0) {
           vm.data = data;
           $timeout(()=>vm.success = true, 0); // Set success back to true to show the view again, with a 0 timeout because it lowers the glitch rate and allows the client to load the view when it has CPU power ready (I think)
@@ -65,7 +65,7 @@ app.controller('masterCtrl', ['$http', '$httpx', '$timeout', '$interval', '$q', 
 
   let geo_success = (position)=>{
     if (!vm.success) reset_data(); // Do not reset data if data is already displayed
-    if (!vm.q.length) { // Get stops nearby if not in search mode
+    if (typeof vm.q === "undefined" || !vm.q.length) { // Get stops nearby if not in search mode
       vm.conv.then(()=>{
         vm.raw_coords = [position.coords.latitude, position.coords.longitude];
         vm.coords = convert(vm.raw_coords[0], vm.raw_coords[1]);
@@ -103,7 +103,7 @@ app.controller('masterCtrl', ['$http', '$httpx', '$timeout', '$interval', '$q', 
     }
   }
   vm.search = ()=>{
-    if (vm.q.length) {
+    if (typeof vm.q === "string" && vm.q.length) {
       vm.status = "Søker…";
       vm.clearWatch();
       reset_data();
