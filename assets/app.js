@@ -47,7 +47,11 @@ app.controller('masterCtrl', ['$http', '$httpx', '$timeout', '$interval', '$q', 
         vm.success = false; // Set success to false because this forces the whole view to update, without this, weird glitches occured
         if (vm.q && vm.q.length) vm.lockView = true; // Set vm.lockView to true if in search mode, because no updating of view is needed
         if (data.length > 0) {
-          vm.data = data;
+          for (let i = 0; i < data.length; i++) {
+            if (data[i].hasOwnProperty("Stops")) vm.data.push(...data[i].Stops); // Push all the stops if data[i] is a district
+            else vm.data.push(data[i]); // Push the stop if data[i] is a stop
+          }
+          vm.data = vm.data.filter((stop, index, self) => self.findIndex(t => t.ID === stop.ID) === index); // Remove duplicate entries
           $timeout(()=>vm.success = true, 0); // Set success back to true to show the view again, with a 0 timeout because it lowers the glitch rate and allows the client to load the view when it has CPU power ready (I think)
           $interval(()=>vm.loadLimit++, 2000);
         } else {
