@@ -3,7 +3,7 @@ app.directive('widget', ['$http', '$httpx', '$q', function ($http, $httpx, $q) {
     templateUrl: 'assets/widget.html',
     controller: function ($scope, $element, $attrs) {
       let vm = this;
-      vm.url = "https://reiseplanlegger-ekstern.ruter.no/no/Sanntid/For/("+$scope.stop.ID+")"+$scope.stop.Name+"%20("+$scope.stop.District+")?x-requested-with=XMLHttpRequest";
+      vm.url = "https://reiseplanlegger-ekstern.ruter.no/no/Sanntid/For/("+($scope.stop.ID || $scope.stop.Id)+")"+$scope.stop.Name+"%20("+$scope.stop.District+")?x-requested-with=XMLHttpRequest";
       vm.content = "<c>Laster inn...</c><br><br><br>";
       vm.timestamp = "";
       vm.canceler = $q.defer();
