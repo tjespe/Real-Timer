@@ -35,7 +35,8 @@ app.controller('masterCtrl', ['$http', '$httpx', '$timeout', '$interval', '$q', 
     vm.loadLimit = 5;
     vm.data = [];
     vm.realTimeData = {};
-  }
+  };
+  reset_data();
   const get_data = url_param=>{
     $httpx.get('//script.google.com/macros/s/AKfycbzQ4aytAhVinfiYxMy2G-4whWFXv1V1YIbc1LE8KQPZcQQT6Odi/exec?url='+url_param, {lifetime:Infinity, timeout:vm.canceler.promise, alt_urls:['https://cdn1.real-timer.cf:2087/?url='+url_param, 'https://cdn2.real-timer.cf/?url='+url_param]}).then(function (data) {
       for (let i = 0; i < data.length; i++) setDefaultValues(data[i]);
