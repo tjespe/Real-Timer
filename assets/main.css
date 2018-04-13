@@ -1,6 +1,7 @@
 body {
   font-family: ubuntu, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   margin: 0;
+  padding-top: 40px;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   -khtml-user-select: none;
@@ -9,13 +10,15 @@ body {
   user-select: none;
 }
 header {
-  width: 100%;
   background: #FEFEFE;
-  margin: auto;
   border: 1px solid #CCC;
-  letter-spacing: 1px;
   height: 40px;
+  letter-spacing: 1px;
+  margin: auto;
+  position: fixed;
   text-align: center;
+  top: 0;
+  width: 100%;
   z-index: 1000;
 }
 header>input {
@@ -52,16 +55,9 @@ h2 {
   margin-top: 6px;
   font-weight: 100;
 }
-spacer {
-  margin-bottom: 35px;
-}
 @media screen and (min-height: 570px) {
   header {
     position: fixed;
-  }
-  spacer {
-    display: block;
-    height: 20px;
   }
 }
 .content {

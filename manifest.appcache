@@ -1,6 +1,6 @@
 CACHE MANIFEST
 
-# Version 44
+# Version 45
 
 CACHE:
 index.html
@@ -13,7 +13,6 @@ assets/ubuntu.css
 assets/widget.html
 assets/widget.js
 https://bris.cf/src/js/services/httpx.js
-https://code.jquery.com/jquery-3.1.1.min.js
 
 NETWORK:
 *

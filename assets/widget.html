@@ -1,6 +1,6 @@
 <div class="content-row" ng-click="stop.expanded = !stop.expanded; stop.hasExpanded = true; m.clearWatch()">
   <div ng-bind="stop.Name"></div>
-  <div class="glyphicon" ng-if="m.jqLoaded" ng-class="{'glyphicon-chevron-up':stop.expanded, 'glyphicon-chevron-down':!stop.expanded}"></div>
+  <div class="glyphicon" ng-class="{'glyphicon-chevron-up':stop.expanded, 'glyphicon-chevron-down':!stop.expanded}"></div>
 </div>
 <div class="widget" ng-show="stop.expanded">
   <div class="top-bar">

@@ -20,7 +20,6 @@ app.controller('masterCtrl', ['$http', '$httpx', '$timeout', '$interval', '$q', 
   let vm = this;
   vm.q = "";
   vm.css = "";
-  vm.jqLoaded = false;
   vm.raw_coords = [0,0];
   vm.coords = [0,0];
   vm.conv = $httpx.get('assets/converter.min.js', {lifetime: Infinity}).then((data)=>{
@@ -119,13 +118,7 @@ app.controller('masterCtrl', ['$http', '$httpx', '$timeout', '$interval', '$q', 
   };
   $scope.$watch('m.q', vm.search, true);
   vm.get_position();
-  $httpx.get('assets/glyphicons.min.css', {lifetime: Infinity}).then((data)=>vm.css += data);
-  $httpx.get('assets/ubuntu.css', {lifetime: Infinity}).then((data)=>vm.css += data);
-  vm.jq = $httpx.get('https://code.jquery.com/jquery-3.1.1.min.js', {lifetime: Infinity});
-  vm.jq.then((data)=>{
-    eval(data);
-    vm.jqLoaded = true;
-  });
+  ["assets/glyphicons.min.css", "assets/ubuntu.css"].forEach(url=>$httpx.get(url, {lifetime: Infinity}).then(data=>vm.css += data));
   vm.clearWatch = ()=>{
     vm.lockView = true;
     navigator.geolocation.clearWatch(vm.wpid);

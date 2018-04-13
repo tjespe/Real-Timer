@@ -19,10 +19,10 @@ app.directive('widget', ['$http', '$httpx', '$q', function ($http, $httpx, $q) {
         vm.loading = true;
         $http.get(vm.url+"&d="+Date.now(), {timeout: vm.canceler.promise}).success((data)=>{
           vm.loading = false;
-          let content = $(data).find("ul").html() || $(data).find(".travelresultsNone").html();
+          let content = angular.element(data).find("ul").html() || angular.element(data)[0].querySelector(".travelresultsNone").innerHTML;
           content = content.replace(/href=\"\/no\/Avvik\/Avganger\/(\d+)\"/g, (str, id)=>"href=\"https://ruter.no/avvik/avviksmelding?deviationid="+id+"\"");
           vm.setContent(content);
-          vm.timestamp = $(data).find(".time").html();
+          vm.timestamp = angular.element(data).find(".time").html();
         }).error(vm.throwError);
       };
       vm.throwError = (data, e)=>{
