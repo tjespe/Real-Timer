@@ -74,7 +74,7 @@ app.controller('masterCtrl', ['$http', '$httpx', '$timeout', '$interval', '$q', 
       vm.get_position();
     }
   };
-  $scope.$watch('m.q', search, true);
+  $scope.$watch('m.query', search, true);
 
   /** Functions for getting user position */
   const geo_success = position=>{
