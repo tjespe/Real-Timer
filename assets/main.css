@@ -15,7 +15,7 @@ header {
   height: 40px;
   letter-spacing: 1px;
   margin: auto;
-  position: fixed;
+  position: absolute;
   text-align: center;
   top: 0;
   width: 100%;
