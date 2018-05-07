@@ -22,7 +22,7 @@ app.directive('widget', ['$http', '$httpx', '$q', function ($http, $httpx, $q) {
           let content = angular.element(data).find("ul").html() || angular.element(data)[0].querySelector(".travelresultsNone").innerHTML;
           content = content.replace(/href=\"\/no\/Avvik\/Avganger\/(\d+)\"/g, (str, id)=>"href=\"https://ruter.no/avvik/avviksmelding?deviationid="+id+"\"");
           vm.setContent(content);
-          vm.timestamp = angular.element(data).find(".time").html();
+          if (el = angular.element(data)[0].querySelector(".time")) vm.timestamp = el.innerHTML;
         }).error(vm.throwError);
       };
       vm.throwError = (data, e)=>{
