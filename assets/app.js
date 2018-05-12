@@ -48,7 +48,7 @@ app.controller('masterCtrl', ['$http', '$httpx', '$timeout', '$interval', '$q', 
             if (data[i].hasOwnProperty("Stops")) vm.data.push(...data[i].Stops); // Push all the stops if data[i] is a district
             else vm.data.push(data[i]); // Push the stop if data[i] is a stop
           }
-          vm.data = vm.data.filter((stop, index, self) => self.findIndex(t => t.ID === stop.ID) === index); // Remove duplicate entries
+          vm.data = vm.data.filter((stop, index, self) => self.findIndex(t => t.ID === stop.ID && t.Id === stop.Id) === index); // Remove duplicate entries
           $timeout(()=>vm.success = true, 0); // Set success back to true to show the view again, with a 0 timeout because it lowers the glitch rate and allows the client to load the view when it has CPU power ready (I think)
           $interval(()=>vm.loadLimit++, 2000);
         } else {
